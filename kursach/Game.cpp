@@ -10,6 +10,7 @@ void Game::initWindow()
 	this->videoMode.height = 600;
 	this->videoMode.width = 800;
 	this->window = new RenderWindow(this->videoMode, "GameName", Style::Titlebar | Style::Close);
+	this->window->setVerticalSyncEnabled(true);
 }
 
 Game::Game()
@@ -27,15 +28,15 @@ const bool Game::getWindowIsOpen() const
 }
 void Game::PollEvents()
 {
-	while (this->window->pollEvent(this->ev))
+	while (this->window->pollEvent(this->event))
 	{
-		switch (this->ev.type)
+		switch (this->event.type)
 		{
 		case Event::Closed:
 			this->window->close();
 			break;
 		case Event::KeyPressed:
-			if (this->ev.key.code == Keyboard::Escape)
+			if (this->event.key.code == Keyboard::Escape)
 			{
 				this->window->close();
 			}
@@ -45,10 +46,15 @@ void Game::PollEvents()
 void Game::Update()
 {
 	this->PollEvents();
+
+	this->player.Update();
 }
 
 void Game::Render()
 {
 	this->window->clear(Color(150, 150, 150));
+
+	this->player.Render(this->window);
+
 	this->window->display();
 }

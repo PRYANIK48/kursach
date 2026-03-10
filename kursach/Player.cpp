@@ -1,98 +1,77 @@
 #include "Player.h"
 #include <iostream>
-void Player::initVariables()
-{
-	this->playerSheet.loadFromFile("Textures/hero.png");
-	this->playerSprite.setTexture(playerSheet);
-	this->playerSprite.setPosition(0, 0);
-	this->playerSprite.setTextureRect(IntRect(0, 192, 96, 96));
-	this->moveSpeed = 0.5;
+void Player::InitVariables(){
+	this->player_sheet_.loadFromFile("Textures/hero.png");
+	this->player_sprite_.setTexture(player_sheet_);
+	this->player_sprite_.setPosition(0, 0);
+	this->player_sprite_.setTextureRect(IntRect(0, 192, 96, 96));
+	this->move_speed_ = 0.5;
 }
-void Player::initShape()
-{
-	this->shape.setFillColor(Color(220, 200, 150));
-	this->shape.setSize(Vector2f(100.f, 100.f));
-	this->shape.setPosition(0, 0);
+void Player::InitShape(){
+	this->shape_.setFillColor(Color(220, 200, 200));
+	this->shape_.setSize(Vector2f(100.f, 100.f));
+	this->shape_.setPosition(0, 0);
 }
-Player::Player(float x, float y)
-{
-	this->shape.setPosition(x, y);
+Player::Player(float x, float y){
+	this->shape_.setPosition(x, y);
 
-	this->initVariables();
-	this->initShape();
+	this->InitVariables();
+	this->InitShape();
 }
-Player::~Player()
-{
-}
-void Player::UpdateInput(float time)
-{
-	if (Keyboard::isKeyPressed(Keyboard::A))
-	{
-		this->direction.x = -1.f;
+void Player::UpdateInput(float time){
+	if (Keyboard::isKeyPressed(Keyboard::A)){
+		this->direction_.x = -1.f;
 	}
-	else if (Keyboard::isKeyPressed(Keyboard::D))
-	{
-		this->direction.x = 1.f;
+	else if (Keyboard::isKeyPressed(Keyboard::D)){
+		this->direction_.x = 1.f;
 	}
-	if (Keyboard::isKeyPressed(Keyboard::W))
-	{
-		this->direction.y = -1.f;
+	if (Keyboard::isKeyPressed(Keyboard::W)){
+		this->direction_.y = -1.f;
 	}
-	else if (Keyboard::isKeyPressed(Keyboard::S))
-	{
-		this->direction.y = 1.f;
+	else if (Keyboard::isKeyPressed(Keyboard::S)){
+		this->direction_.y = 1.f;
 	}
-	if (abs(this->direction.x) > 0 || abs(this->direction.y) > 0)
-	{
-		if (abs(this->direction.x) > 0 && abs(this->direction.y) > 0)
-		{
-			this->direction.x = 0.707 * this->direction.x;
-			this->direction.y = 0.707 * this->direction.y;
+	if (abs(this->direction_.x) > 0 || abs(this->direction_.y) > 0){
+		if (abs(this->direction_.x) > 0 && abs(this->direction_.y) > 0){
+			this->direction_.x = 0.707 * this->direction_.x;
+			this->direction_.y = 0.707 * this->direction_.y;
 		}
-		this->animFrame += (this->moveSpeed * 0.02 * time);
-		if (this->animFrame > this->animLenght)
-		{
-			this->animFrame -= this->animLenght;
+		this->anim_frame_ += (this->move_speed_ * 0.02 * time);
+		if (this->anim_frame_ > this->anim_lenght_){
+			this->anim_frame_ -= this->anim_lenght_;
 		}
-		this->shape.move(this->direction.x * this->moveSpeed * time, this->direction.y * this->moveSpeed * time);
-		this->playerSprite.move(this->direction.x * this->moveSpeed * time, this->direction.y * this->moveSpeed * time);
+		this->shape_.move(this->direction_.x * this->move_speed_ * time, this->direction_.y * this->move_speed_ * time);
+		this->player_sprite_.move(this->direction_.x * this->move_speed_ * time, this->direction_.y * this->move_speed_ * time);
 
-		if (abs(this->direction.y) > abs(this->direction.x))
-		{
-			if (this->direction.y <= 0)
-			{
-				this->animSheetRow = 3;
+		if (abs(this->direction_.y) > abs(this->direction_.x)){
+			if (this->direction_.y <= 0){
+				this->anim_sheet_row_ = 3;
+			}
+			else{
+				this->anim_sheet_row_ = 0;
+			}
+		}
+		else{
+			if (this->direction_.x >= 0){
+				this->anim_sheet_row_ = 2;
 			}
 			else
 			{
-				this->animSheetRow = 0;
+				this->anim_sheet_row_ = 1;
 			}
 		}
-		else
-		{
-			if (this->direction.x >= 0)
-			{
-				this->animSheetRow = 2;
-			}
-			else
-			{
-				this->animSheetRow = 1;
-			}
-		}
-		this->playerSprite.setTextureRect(IntRect(96 * int(animFrame), 96 *animSheetRow, 96, 96));
-		std::cout << this->direction.x << " " << this->direction.y << std::endl;
-		this->animSheetRow = 0;
-		this->direction.x = 0;
-		this->direction.y = 0;
+		this->player_sprite_.setTextureRect(IntRect(96 * int(anim_frame_), 96 *anim_sheet_row_, 96, 96));
+		std::cout << this->direction_.x << " " << this->direction_.y << std::endl;
+		this->anim_sheet_row_ = 0;
+		this->direction_.x = 0;
+		this->direction_.y = 0;
 	}
 }
-void Player::Update(float time)
-{
+void Player::Update(float time){
 	this->UpdateInput(time);
 }
 
-void Player::Render(RenderTarget* target)
-{
-	target->draw(this->shape);
-	target->draw(this->playerSprite);
+void Player::Render(RenderTarget* target){
+	target->draw(this->shape_);
+	target->draw(this->player_sprite_);
 }

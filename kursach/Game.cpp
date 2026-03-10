@@ -14,9 +14,9 @@ void Game::InitWindow() {
     this->room_texture_.loadFromFile("Textures/room.png");
     this->room_sprite_.setTexture(room_texture_);
     this->room_sprite_.setScale(0.5, 0.5);
-    this->room_sprite_.setPosition((this->video_mode_.width / 2) - float(room_texture_.getSize().x / 2) * room_sprite_.getScale().x, (this->video_mode_.height / 2) - float(room_texture_.getSize().y / 2) * room_sprite_.getScale().y);
+    this->room_sprite_.setPosition((this->video_mode_.width - (room_texture_.getSize().x) * room_sprite_.getScale().x) / 2, (this->video_mode_.height - (room_texture_.getSize().y) * room_sprite_.getScale().y) / 2);
 
-    std::cout << (this->video_mode_.width / 2) - (float(room_texture_.getSize().x / 2) * room_sprite_.getScale().x) << std::endl;
+    std::cout << (this->video_mode_.width - (room_texture_.getSize().x) * room_sprite_.getScale().x) / 2 << std::endl;
 }
 void Game::InitPlayer() {
     this->player_ = new Player(this->video_mode_.width / 2, this->video_mode_.height / 2);

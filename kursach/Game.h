@@ -6,6 +6,12 @@ class Game
 {
 
 private:
+	Image map_image;
+	Texture map;
+	Sprite s_map;
+
+
+
 	RenderWindow* window;
 	VideoMode videoMode;
 	Event event;

@@ -43,11 +43,11 @@ void Game::PollEvents()
 		}
 	}
 }
-void Game::Update()
+void Game::Update(float time)
 {
 	this->PollEvents();
 
-	this->player.Update();
+	this->player.Update(time);
 }
 
 void Game::Render()

@@ -18,7 +18,7 @@ public:
 	virtual ~Game();
 	const bool getWindowIsOpen() const;
 	void PollEvents();
-	void Update();
+	void Update(float time);
 	void Render();
 };
 

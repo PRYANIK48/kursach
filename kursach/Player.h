@@ -23,8 +23,8 @@ class Player
 public:
 	Player(float x = 0.f, float y = 0.f);
 	virtual ~Player();
-	void UpdateInput();
-	void Update();
+	void UpdateInput(float time);
+	void Update(float time);
 	void Render(RenderTarget* target);
 };
 

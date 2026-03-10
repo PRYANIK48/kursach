@@ -7,12 +7,12 @@ int main()
 	srand(static_cast<unsigned>(time(0)));
 	Game game;
 
-	//Clock clock;
+	Clock clock;
 	while (game.getWindowIsOpen())
 	{
-		//float time = clock.getElapsedTime().asMilliseconds();
-		//clock.restart(); 
-		game.Update();
+		float time = clock.getElapsedTime().asMilliseconds();
+		clock.restart(); 
+		game.Update(time);
 		game.Render();
 	}
 	return 0;

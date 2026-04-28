@@ -1,6 +1,7 @@
 #pragma once
 #include<ctime>
 #include "Player.h" 
+#include "Entity.h"
 using namespace sf;
 class Game
 {
@@ -22,5 +23,9 @@ private:
 	void InitVariables();
 	void InitWindow();
 	void InitPlayer();
+
+
+	void InitTester();
+	Entity* enemy_;
 };
 

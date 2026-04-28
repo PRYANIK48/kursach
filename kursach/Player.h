@@ -1,35 +1,43 @@
 #pragma once
-#include <SFML/Graphics.hpp>
-#include <SFML/System.hpp>
-#include <SFML/Window.hpp>
-#include <SFML/Audio.hpp>
+#include <vector>
+#include "Visuals.h"
+#include "Projectile.h"
 using namespace sf;
+//сделать наследником класса от entity
 class Player
 {
 public:
-    Player(float x = 0.f, float y = 0.f);
+    Player(Vector2f position = Vector2f(0.f,0.f));
 
-    void UpdateInput(float time);
     void Update(float time);
     void Render(RenderTarget* target);
 
-    float get_player_position_x() const { return position_x_; };
-    float get_player_position_y() const { return position_y_; };
+    void TryShoot();
+
+    Vector2f get_position() const { return position_; };
 
 private:
-    Texture player_sheet_;
-    Sprite player_sprite_;
-    RectangleShape shape_;
+    Visuals visuals;
+    Projectile projectileTemplate_;
+    std::vector<Projectile*> projectiles;
+    //нужно переписать движение с формулами ускорения и т.д под физику
+    Vector2f moveDirection_;
+    Vector2f facingDirection_;
 
-    Vector2f direction_;
+    float basicShootCooldown_;
+    float shootCooldown_;
     float move_speed_;
-    float anim_frame_ = 0.f;
-    float position_x_;
-    float position_y_;
-    int anim_sheet_row_ = 0;
-    int anim_lenght_ = 3;
+    float damage_;
+    float maxHealth_;
+    float health_;
+
+    Vector2f position_;
+
+    void shoot();
+    void updateInput(float time);
+    void updateProjectiles(float time);
+    void updateProjectileTemplate();
 
     void InitVariables();
-    void InitShape();
 };
 

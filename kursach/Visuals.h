@@ -25,13 +25,9 @@ public:
     void set_anim_sheet_row(int row) { anim_sheet_row_ = row; };
     int get_anim_length() const { return anim_length_; };
     void set_anim_length(int length) { anim_length_ = length; };
-    void printInfo() {
-        this->sprite_.setTexture(sheet_);
-    };
-    //костыль
-    void InitTexture() {
-        this->sprite_.setTexture(sheet_);
-    };
+    void printInfo() {};
+
+    Visuals& operator=(const Visuals& ref);
 
 private:
     Texture sheet_;

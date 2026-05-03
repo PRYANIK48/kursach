@@ -1,36 +1,48 @@
 #include "Player.h"
 #include <iostream>
+#include "Enemy.h"
 void Player::InitVariables() {
-    visuals = Visuals(position_);
-    //костыль
-    visuals.InitTexture();
     this->basicShootCooldown_ = 10.f;
     this->shootCooldown_ = 0.f;
-    this->move_speed_ = 0.5f;
-    this->damage_ = 1.f;
-    this->maxHealth_ = 10.f;
-    this->health_ = maxHealth_;
-    visuals.set_anim_sheet_row(1);
-    this->facingDirection_.x = 0.f;
-    this->facingDirection_.y = 1.f;
+    set_visuals(Visuals(get_position()));
+    set_move_speed(0.5f);
+    set_damage(1.f);
+    set_maxHealth(10.f);
+    set_health(get_maxHealth());
+    get_visuals().set_anim_sheet_row(1);
+    set_facing_direction(Vector2f(0.f, 1.f));
     updateProjectileTemplate();
 }
+void Player::InitCollider()
+{
+    get_collider().setFillColor(Color(100, 200, 100, 80));
+    get_collider().setOutlineColor(Color(50, 255, 50, 200));
+    get_collider().setOutlineThickness(2.f);
+    get_collider().setSize(Vector2f(30 * get_visuals().get_sprite().getScale().x, 30 * get_visuals().get_sprite().getScale().x));
+    get_collider().setPosition(get_visuals().get_visuals_position());
+}
 Player::Player(Vector2f position) {
-    this->position_ = position;
-    this->InitVariables();
+    set_position(position);
+    InitVariables();
+    InitCollider();
 }
 void Player::Update(float time) {
-    this->updateInput(time);
-    this->updateProjectiles(time);
+    updateInput(time);
     shootCooldown_ -= 0.05f * time;
 }
 
 void Player::Render(RenderTarget* target) {
-    visuals.printInfo();
-    for (int i = 0; i < projectiles.size(); i++) {
-        projectiles[i]->Render(target);
+    get_visuals().printInfo();
+    get_visuals().Render(target);
+    target->draw(get_collider());
+}
+
+void Player::CheckCollision(Entity* entity)
+{
+    if (get_collider().getGlobalBounds().intersects(entity->get_collider().getGlobalBounds()))
+    {
+        onCollision(entity);
     }
-    visuals.Render(target);
 }
 
 void Player::TryShoot()
@@ -44,62 +56,57 @@ void Player::TryShoot()
 
 void Player::shoot()
 {
-    projectiles.push_back(new Projectile(projectileTemplate_, facingDirection_, position_));
+    Projectile* p = new Projectile(projectileTemplate_, get_facing_direction(), get_position());
+    EntityInteractionSystem::AddEntity(p);  
 }
 void Player::updateInput(float time) {
     if (Keyboard::isKeyPressed(Keyboard::A)) {
-        this->moveDirection_.x = -1.f;
+        set_move_direction(Vector2f(-1.f, get_move_direction().y));
     }
     else if (Keyboard::isKeyPressed(Keyboard::D)) {
-        this->moveDirection_.x = 1.f;
+        set_move_direction(Vector2f(1.f, get_move_direction().y));
     }
     if (Keyboard::isKeyPressed(Keyboard::W)) {
-        this->moveDirection_.y = -1.f;
+        set_move_direction(Vector2f(get_move_direction().x, -1.f));
     }
     else if (Keyboard::isKeyPressed(Keyboard::S)) {
-        this->moveDirection_.y = 1.f;
+        set_move_direction(Vector2f(get_move_direction().x, 1.f));
     }
-    if (abs(this->moveDirection_.x) > 0 || abs(this->moveDirection_.y) > 0) {
-        if (abs(this->moveDirection_.x) > 0 && abs(this->moveDirection_.y) > 0) {
+    if (abs(get_move_direction().x) > 0 || abs(get_move_direction().y) > 0) {
+        if (abs(get_move_direction().x) > 0 && abs(get_move_direction().y) > 0) {
             //сделать нормальную нормализацию
-            this->moveDirection_.x = 0.707f * this->moveDirection_.x;
-            this->moveDirection_.y = 0.707f * this->moveDirection_.y;
+            set_move_direction(get_move_direction() * 0.707f);
         }
-        visuals.set_anim_frame(visuals.get_anim_frame() + this->move_speed_ * 0.04f * time);
-        if (visuals.get_anim_frame() > visuals.get_anim_length()) {
-            visuals.set_anim_frame(visuals.get_anim_frame() - visuals.get_anim_length());
+        get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_move_speed() * 0.04f * time);
+        if (get_visuals().get_anim_frame() > get_visuals().get_anim_length()) {
+            get_visuals().set_anim_frame(get_visuals().get_anim_frame() - get_visuals().get_anim_length());
         }
-        this->position_.x += this->moveDirection_.x * this->move_speed_ * time;
-        this->position_.y += this->moveDirection_.y * this->move_speed_ * time;
-        visuals.SetPosition(position_);
+        set_position(get_position() + get_move_direction() * get_move_speed() * time);
+        get_visuals().SetPosition(get_position());
 
-        if (abs(this->moveDirection_.y) > abs(this->moveDirection_.x)) {
-            if (this->moveDirection_.y <= 0) {
-                this->facingDirection_.x = 0;
-                this->facingDirection_.y = -1;
-                visuals.set_anim_sheet_row(0);
+        if (abs(get_move_direction().y) > abs(get_move_direction().x)) {
+            if (get_move_direction().y <= 0) {
+                set_facing_direction(Vector2f(0.f, -1.f));
+                get_visuals().set_anim_sheet_row(0);
             }
             else {
-                visuals.set_anim_sheet_row(1);
-                this->facingDirection_.x = 0;
-                this->facingDirection_.y = 1;
+                set_facing_direction(Vector2f(0.f, 1.f));
+                get_visuals().set_anim_sheet_row(1);
             }
         }
         else {
-            if (this->moveDirection_.x >= 0) {
-                this->facingDirection_.x = 1;
-                this->facingDirection_.y = 0;
-                visuals.set_anim_sheet_row(3);
+            if (get_move_direction().x >= 0) {
+                set_facing_direction(Vector2f(1.f, 0.f));
+                get_visuals().set_anim_sheet_row(3);
             }
             else {
-                this->facingDirection_.x = -1;
-                this->facingDirection_.y = 0;
-                visuals.set_anim_sheet_row(2);
+                set_facing_direction(Vector2f(-1.f, 0.f));
+                get_visuals().set_anim_sheet_row(2);
             }
         }
     }
     else {
-        visuals.set_anim_frame(0);
+        get_visuals().set_anim_frame(0);
     }
 
     if (Keyboard::isKeyPressed(Keyboard::F))
@@ -107,26 +114,22 @@ void Player::updateInput(float time) {
         TryShoot();
     }
 
-    this->visuals.UpdateSprite();
-    this->moveDirection_.x = 0;
-    this->moveDirection_.y = 0;
-}
-void Player::updateProjectiles(float time)
-{
-    for (auto it = projectiles.begin(); it != projectiles.end(); ) {
-        (*it)->Update(time);
-        if ((*it)->IsDead()) {
-            delete* it;
-            it = projectiles.erase(it);
-        }
-        else {
-            ++it;
-        }
-    }
+    get_collider().setPosition(get_visuals().get_visuals_position());
+    get_visuals().UpdateSprite();
+    set_move_direction(Vector2f(0.f, 0.f));
 }
 void Player::updateProjectileTemplate()
 {
-    projectileTemplate_.set_damage(damage_);
-    projectileTemplate_.set_move_speed(move_speed_ * 2);
+    projectileTemplate_.set_damage(get_damage());
+    projectileTemplate_.set_move_speed(get_move_speed() * 2);
     projectileTemplate_.set_life_time(600.f);
+}
+
+void Player::onCollision(Entity* entity)
+{
+    if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
+        std::cout << "player in enemy" << std::endl;
+    }
+    else if (dynamic_cast<Entity*>(entity)) {
+    }
 }

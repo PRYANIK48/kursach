@@ -1,83 +1,99 @@
 #include "Projectile.h"
 #include <iostream>
+#include "Player.h"
+#include "Enemy.h"
 void Projectile::InitVariables() {
-    visuals_ = Visuals(position_);
-    //костыль
-    visuals_.InitTexture();
-    this->move_speed_ = 0.5f;
+    set_visuals(Visuals(get_position()));
+    set_move_speed(0.5f);
 }
 void Projectile::InitCollider()
 {
-    this->collider_.setFillColor(Color(100, 200, 100, 80));
-    this->collider_.setOutlineColor(Color(50, 255, 50, 200));
-    this->collider_.setOutlineThickness(2.f);
-    this->collider_.setSize(Vector2f(30 * visuals_.get_sprite().getScale().x, 30 * visuals_.get_sprite().getScale().x));
-    this->collider_.setPosition(visuals_.get_visuals_position());
+    get_collider().setFillColor(Color(100, 200, 100, 80));
+    get_collider().setOutlineColor(Color(50, 255, 50, 200));
+    get_collider().setOutlineThickness(2.f);
+    get_collider().setSize(Vector2f(30 * get_visuals().get_sprite().getScale().x, 30 * get_visuals().get_sprite().getScale().x));
+    get_collider().setPosition(get_visuals().get_visuals_position());
 }
 Projectile::Projectile(Vector2f position, Vector2f direction) {
-    this->position_ = position;
-    this->direction_ = direction;
-    this->InitVariables();
-    this->InitCollider();
+    set_position(position);
+    set_move_direction(direction);
+    InitVariables();
+    InitCollider();
 }
-Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position)
-{
-    visuals_ = Visuals(position_);
-    //костыль
-    visuals_.InitTexture();
-    this->damage_ = ref.damage_;
-    this->move_speed_ = ref.move_speed_;
-    this->position_ = position;
-    this->life_time_ = ref.life_time_;
-    this->direction_ = direction;
-    this->collider_ = ref.collider_;
+Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position) {
+    set_visuals(Visuals(position));
+    set_damage(ref.get_damage());
+    set_move_speed(ref.get_move_speed());
+    set_position(position);
+    set_life_time(ref.get_life_time());
+    set_collider(ref.get_collider());
+    get_collider().setPosition(position);
+    set_move_direction(direction);
 }
 void Projectile::updateInput(float time) {
 }
 void Projectile::Update(float time) {
-    this->updateInput(time);
+    if (life_time_ < 0)
+    {
+        set_dead();
+    }
+    life_time_ -= time;
+
+    updateInput(time);
+
     updateVisuals(time);
+}
+void Projectile::Render(RenderTarget* target) {
+    get_visuals().printInfo();
+    get_visuals().Render(target);
+    target->draw(get_collider());
+}
+void Projectile::CheckCollision(Entity* entity)
+{
+    if (get_collider().getGlobalBounds().intersects(entity->get_collider().getGlobalBounds()))
+    {
+        onCollision(entity);
+    }
 }
 
 void Projectile::updateVisuals(float time)
 {
-    if (life_time_ < 0)
-    {
-        isDead_ = true;
+    get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_move_speed() * 0.04f * time);
+    if (get_visuals().get_anim_frame() > get_visuals().get_anim_length()) {
+        get_visuals().set_anim_frame(get_visuals().get_anim_frame() - get_visuals().get_anim_length());
     }
-    life_time_ -= time;
-    visuals_.set_anim_frame(visuals_.get_anim_frame() + this->move_speed_ * 0.04f * time);
-    if (visuals_.get_anim_frame() > visuals_.get_anim_length()) {
-        visuals_.set_anim_frame(visuals_.get_anim_frame() - visuals_.get_anim_length());
-    }
-    this->position_.x += this->direction_.x * this->move_speed_ * time;
-    this->position_.y += this->direction_.y * this->move_speed_ * time;
-    visuals_.SetPosition(position_);
+    this->set_position(get_position() + get_move_direction() * get_move_speed() * time);
+    get_visuals().SetPosition(get_position());
 
-    if (abs(this->direction_.y) > abs(this->direction_.x)) {
-        if (this->direction_.y <= 0) {
-            visuals_.set_anim_sheet_row(0);
+    if (abs(get_move_direction().y) > abs(get_move_direction().x)) {
+        if (get_move_direction().y <= 0) {
+            get_visuals().set_anim_sheet_row(0);
         }
         else {
-            visuals_.set_anim_sheet_row(1);
+            get_visuals().set_anim_sheet_row(1);
         }
     }
     else {
-        if (this->direction_.x >= 0) {
-            visuals_.set_anim_sheet_row(3);
+        if (get_move_direction().x >= 0) {
+            get_visuals().set_anim_sheet_row(3);
         }
         else {
-            visuals_.set_anim_sheet_row(2);
+            get_visuals().set_anim_sheet_row(2);
         }
     }
 
-    this->visuals_.UpdateSprite();
-    this->collider_.setPosition(visuals_.get_visuals_position());
+    get_visuals().UpdateSprite();
+    get_collider().setPosition(get_visuals().get_visuals_position());
 }
 
-void Projectile::Render(RenderTarget* target) {
-    visuals_.printInfo();
-    visuals_.Render(target);
-    //test
-    target->draw(collider_);
+void Projectile::onCollision(Entity* entity)
+{
+    if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
+        std::cout << "projectile in enemy" << std::endl;
+    }
+    if (auto* player = dynamic_cast<Player*>(entity)) {
+        std::cout << "projectile in player" << std::endl;
+    }
+    else if (dynamic_cast<Entity*>(entity)) {
+    }
 }

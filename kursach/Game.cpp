@@ -1,5 +1,6 @@
 #include "Game.h"
 #include <iostream>
+#include "EntityInteractionSystem.h"
 
 void Game::InitVariables() {
     this->window_ = nullptr;
@@ -18,12 +19,15 @@ void Game::InitWindow() {
 
 }
 void Game::InitPlayer() {
+
     this->player_ = new Player(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2));
+    EntityInteractionSystem::AddEntity(this->player_);
 }
 
 void Game::InitTester()
 {
-    this->enemy_ = new Entity(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100));
+    this->enemy_ = new Enemy(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100));
+    EntityInteractionSystem::AddEntity(this->enemy_);
 }
 
 Game::Game() {
@@ -50,10 +54,7 @@ void Game::PollEvents() {
 }
 void Game::Update(float time) {
     this->PollEvents();
-
-    this->player_->Update(time);
-    //тест
-    this->enemy_->Update(time);
+    EntityInteractionSystem::UpdateEntities(time);
 }
 
 void Game::Render() {
@@ -61,9 +62,7 @@ void Game::Render() {
     
     this->window_->draw(room_sprite_);
 
-    this->player_->Render(this->window_);
-    //тест
-    this->enemy_->Render(this->window_);
+    EntityInteractionSystem::RenderEntities(this->window_);
 
     this->window_->display();
 }

@@ -1,7 +1,7 @@
 #pragma once
 #include<ctime>
 #include "Player.h" 
-#include "Entity.h"
+#include "Enemy.h"
 using namespace sf;
 class Game
 {
@@ -26,6 +26,6 @@ private:
 
 
 	void InitTester();
-	Entity* enemy_;
+	Enemy* enemy_;
 };
 

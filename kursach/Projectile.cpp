@@ -5,6 +5,7 @@
 void Projectile::InitVariables() {
     set_visuals(Visuals(get_position()));
     set_move_speed(0.5f);
+    set_friction(0.f);
 }
 void Projectile::InitCollider()
 {
@@ -23,14 +24,14 @@ Projectile::Projectile(Vector2f position, Vector2f direction) {
 Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position) {
     set_visuals(Visuals(position));
     set_damage(ref.get_damage());
+    set_friction(ref.get_friction());
     set_move_speed(ref.get_move_speed());
     set_position(position);
     set_life_time(ref.get_life_time());
     set_collider(ref.get_collider());
     get_collider().setPosition(position);
     set_move_direction(direction);
-}
-void Projectile::updateInput(float time) {
+    set_velocity(direction*get_move_speed());
 }
 void Projectile::Update(float time) {
     if (life_time_ < 0)
@@ -40,7 +41,7 @@ void Projectile::Update(float time) {
     life_time_ -= time;
 
     updateInput(time);
-
+    updatePosition(time);
     updateVisuals(time);
 }
 void Projectile::Render(RenderTarget* target) {
@@ -56,14 +57,28 @@ void Projectile::CheckCollision(Entity* entity)
     }
 }
 
+void Projectile::updateInput(float time) {
+}
+void Projectile::updatePosition(float time) {
+    set_velocity(get_velocity() + get_move_direction() * get_move_speed() * get_friction() * time * 0.01f);
+    set_position(get_position() + get_velocity() * time);
+    set_velocity(get_velocity() - get_velocity() * get_friction() * time * 0.01f);
+    if (abs(get_velocity().x) < 0.01f * get_friction())
+    {
+        set_velocity(Vector2f(0.f, get_velocity().y));
+    }
+    if (abs(get_velocity().y) < 0.01f * get_friction())
+    {
+        set_velocity(Vector2f(get_velocity().x, 0.f));
+    }
+    get_collider().setPosition(get_position());
+}
 void Projectile::updateVisuals(float time)
 {
     get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_move_speed() * 0.04f * time);
     if (get_visuals().get_anim_frame() > get_visuals().get_anim_length()) {
         get_visuals().set_anim_frame(get_visuals().get_anim_frame() - get_visuals().get_anim_length());
     }
-    this->set_position(get_position() + get_move_direction() * get_move_speed() * time);
-    get_visuals().SetPosition(get_position());
 
     if (abs(get_move_direction().y) > abs(get_move_direction().x)) {
         if (get_move_direction().y <= 0) {
@@ -82,14 +97,16 @@ void Projectile::updateVisuals(float time)
         }
     }
 
+    get_visuals().SetPosition(get_position());
     get_visuals().UpdateSprite();
-    get_collider().setPosition(get_visuals().get_visuals_position());
 }
 
 void Projectile::onCollision(Entity* entity)
 {
     if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
         std::cout << "projectile in enemy" << std::endl;
+        enemy->AddImpulse(get_velocity());
+        set_dead();
     }
     if (auto* player = dynamic_cast<Player*>(entity)) {
         std::cout << "projectile in player" << std::endl;

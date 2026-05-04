@@ -24,6 +24,8 @@ private:
 
     void shoot();
     void updateInput(float time);
+    void updatePosition(float time);
+    void updateVisuals(float time);
     void updateProjectileTemplate();
 
     void onCollision(Entity* entity);

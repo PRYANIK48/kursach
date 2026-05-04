@@ -24,10 +24,9 @@ Enemy::Enemy(Vector2f position) {
     InitCollider();
 }
 void Enemy::Update(float time) {
-    if (IsDead())
-    {
-    }
-    this->updateInput(time);
+    updateInput(time);
+    updatePosition(time);
+    updateVisuals(time);
 }
 void Enemy::Render(RenderTarget* target) {
     get_visuals().printInfo();
@@ -46,9 +45,25 @@ void Enemy::updateInput(float time) {
     {
         std::cout << "e" << std::endl;
     }
-
-    this->get_visuals().UpdateSprite();
-    this->set_move_direction(Vector2f(0.f, 0.f));
+}
+void Enemy::updatePosition(float time) {
+    std::cout << "x: " << get_velocity().x << " y: " << get_velocity().y << std::endl;
+    set_velocity(get_velocity() + get_move_direction() * get_move_speed() * get_friction() * time * 0.01f);
+    set_position(get_position() + get_velocity() * time);
+    set_velocity(get_velocity() - get_velocity() * get_friction() * time * 0.01f);
+    if (abs(get_velocity().x) < 0.01f * get_friction())
+    {
+        set_velocity(Vector2f(0.f, get_velocity().y));
+    }
+    if (abs(get_velocity().y) < 0.01f * get_friction())
+    {
+        set_velocity(Vector2f(get_velocity().x, 0.f));
+    }
+    get_collider().setPosition(get_position());
+}
+void Enemy::updateVisuals(float time) {
+    get_visuals().SetPosition(get_position());
+    get_visuals().UpdateSprite();
 }
 
 void Enemy::onCollision(Entity* entity)

@@ -12,6 +12,8 @@ public:
 private:
 
     void updateInput(float time) ;
+    void updatePosition(float time) ;
+    void updateVisuals(float time) ;
 
     void onCollision(Entity* entity);
     void InitVariables();

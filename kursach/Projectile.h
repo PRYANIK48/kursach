@@ -17,13 +17,14 @@ public:
     void set_life_time(float time) {life_time_ = time; };
 
 private:
-    float life_time_ = 300.f;
+    float life_time_ = 800.f;
 
     void updateInput(float time);
+    void updatePosition(float time);
+    void updateVisuals(float time);
 
     void onCollision(Entity* entity);
     void InitVariables();
     void InitCollider();
-    void updateVisuals(float time);
 };
 

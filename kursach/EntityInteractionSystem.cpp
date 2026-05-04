@@ -38,6 +38,9 @@ void EntityInteractionSystem::checkCollisions(Entity* entity)
 {
     for (auto it = entities.begin(); it != entities.end(); ) {
         entity->CheckCollision(*it);
+        if ((*it)->IsDead()) {
+            break;
+        }
         ++it;
     }
 }

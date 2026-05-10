@@ -3,7 +3,7 @@
 class Enemy : public Entity
 {
 public:
-    Enemy(Vector2f position);
+    Enemy(Vector2f position = Vector2f(0.f, 0.f));
 
     void Update(float time) override;
     void Render(RenderTarget* target) override;
@@ -11,11 +11,12 @@ public:
 
 private:
 
-    void updateInput(float time) ;
-    void updatePosition(float time) ;
-    void updateVisuals(float time) ;
+    void updateInput(float time) override;
+    void updatePosition(float time) override;
+    void updateVisuals(float time) override;
 
-    void onCollision(Entity* entity);
-    void InitVariables();
-    void InitCollider();
+    void onCollision(Entity* entity) override;
+    void InitVariables() override;
+    void InitVisuals() override;
+    void InitCollider() override;
 };

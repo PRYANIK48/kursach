@@ -3,26 +3,38 @@
 #include "Player.h"
 #include "Enemy.h"
 void Projectile::InitVariables() {
-    set_visuals(Visuals(get_position()));
     set_move_speed(0.5f);
     set_friction(0.f);
+}
+void Projectile::InitVisuals()
+{
+    get_visuals().SetPosition(get_position());
+    get_visuals().set_frame_w(140);
+    get_visuals().set_frame_h(140);
+    get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
+    get_visuals().set_anim_sheet_row(1);
+    get_visuals().set_anim_length(3);
 }
 void Projectile::InitCollider()
 {
     get_collider().setFillColor(Color(100, 200, 100, 80));
     get_collider().setOutlineColor(Color(50, 255, 50, 200));
     get_collider().setOutlineThickness(2.f);
-    get_collider().setSize(Vector2f(30 * get_visuals().get_sprite().getScale().x, 30 * get_visuals().get_sprite().getScale().x));
+    get_collider().setSize(Vector2f(40 * get_visuals().get_sprite().getScale().x, 40 * get_visuals().get_sprite().getScale().x));
+    get_collider().setOrigin(Vector2f(10,10));
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
-Projectile::Projectile(Vector2f position, Vector2f direction) {
+Projectile::Projectile(Vector2f position, Vector2f direction, Entity* owner) {
+    set_owner(owner);
     set_position(position);
     set_move_direction(direction);
     InitVariables();
+    InitVisuals();
     InitCollider();
 }
-Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position) {
-    set_visuals(Visuals(position));
+Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position, Entity* owner) {
+    set_owner(owner);
+    set_visuals(ref.get_visuals());
     set_damage(ref.get_damage());
     set_friction(ref.get_friction());
     set_move_speed(ref.get_move_speed());
@@ -31,14 +43,14 @@ Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f posit
     set_collider(ref.get_collider());
     get_collider().setPosition(position);
     set_move_direction(direction);
-    set_velocity(direction*get_move_speed());
+    set_velocity(direction * get_move_speed());
 }
 void Projectile::Update(float time) {
-    if (life_time_ < 0)
+    if (get_life_time() < 0)
     {
         set_dead();
     }
-    life_time_ -= time;
+    set_life_time(get_life_time() -time);
 
     updateInput(time);
     updatePosition(time);
@@ -103,14 +115,27 @@ void Projectile::updateVisuals(float time)
 
 void Projectile::onCollision(Entity* entity)
 {
+    if (entity == get_owner()) {
+        std::cout << "projectile in ally" << std::endl;
+    }
     if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
-        std::cout << "projectile in enemy" << std::endl;
-        enemy->AddImpulse(get_velocity());
-        set_dead();
+        if (!IsDead())
+        {
+            std::cout << "projectile in enemy" << std::endl;
+            enemy->AddImpulse(get_velocity());
+            enemy->ApplyDamage(get_damage());
+            set_dead();
+        }
     }
     if (auto* player = dynamic_cast<Player*>(entity)) {
-        std::cout << "projectile in player" << std::endl;
+        if (!IsDead())
+        {
+            std::cout << "projectile in player" << std::endl;
+        }
     }
-    else if (dynamic_cast<Entity*>(entity)) {
+    if (dynamic_cast<Entity*>(entity)) {
+        if (!IsDead())
+        {
+        }
     }
 }

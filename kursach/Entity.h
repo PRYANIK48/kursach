@@ -7,15 +7,17 @@ class Entity
 {
 public:
 
-    virtual ~Entity() {};
+    Entity(Vector2f position = Vector2f(0.f, 0.f)) { position_ = position; };
 
     virtual void Update(float time) = 0;
     virtual void Render(RenderTarget* target) = 0;
     virtual void CheckCollision(Entity* entity) = 0;
+    virtual void ApplyDamage(float damage);
 
     void AddImpulse(Vector2f force) { velocity_ += force; };
 
     Visuals& get_visuals() { return visuals_; };
+    const Visuals& get_visuals() const { return visuals_; };
     void set_visuals(Visuals visuals) { visuals_ = visuals; }
     RectangleShape& get_collider() { return collider_; };
     const RectangleShape& get_collider() const { return collider_; }
@@ -37,7 +39,18 @@ public:
     float get_maxHealth() const { return maxHealth_; };
     void set_maxHealth(float health) { maxHealth_ = health; };
     float get_health() const { return health_; };
-    void set_health(float health) { health_ = health; };
+    void set_health(float health) {
+        health_ = health; 
+        if (health > maxHealth_)
+        {
+            health = maxHealth_;
+        }
+        else if (health <= 0)
+        {
+            health = 0;
+            set_dead();
+        }
+    };
     bool IsDead() const { return isDead_; };
     void set_dead() { isDead_ = true; };
 
@@ -47,8 +60,8 @@ private:
     RectangleShape collider_;
     Vector2f position_;
     Vector2f velocity_ = Vector2f();
-    Vector2f moveDirection_;
-    Vector2f facingDirection_;
+    Vector2f moveDirection_ = Vector2f();
+    Vector2f facingDirection_ = Vector2f(0.f,1.f);
 
     float friction_ = 0.5f;
     float move_speed_ = 0.f;
@@ -59,8 +72,12 @@ private:
     bool isDead_ = false;
 
     virtual void updateInput(float time) = 0;
+    virtual void updatePosition(float time);
+    virtual void updateVisuals(float time);
+
     virtual void onCollision(Entity* entity) = 0;
     virtual void InitVariables() = 0;
+    virtual void InitVisuals() = 0;
     virtual void InitCollider() = 0;
 };
 

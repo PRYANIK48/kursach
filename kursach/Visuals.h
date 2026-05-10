@@ -4,7 +4,6 @@
 #include <SFML/Window.hpp>
 #include <iostream>
 using namespace sf;
-//сделать базовым
 class Visuals
 {
 public:
@@ -12,17 +11,22 @@ public:
     Visuals(const Visuals& ref);
 
     void SetPosition(Vector2f position);
-    void UpdateSprite() { sprite_.setTextureRect(IntRect(frame_h * int(anim_frame_), frame_w * anim_sheet_row_, frame_w, frame_h)); };
+    void UpdateSprite() { sprite_.setTextureRect(IntRect(frame_h_ * int(anim_frame_), frame_w_ * anim_sheet_row_, frame_w_, frame_h_)); };
     void Render(RenderTarget* target) { 
         target->draw(sprite_);
     };
-    Sprite get_sprite() const { return sprite_; };
-    float get_anim_frame() const { return anim_frame_; };
-    void set_anim_frame(float x) { anim_frame_ = x; };
+    Texture& get_sheet() { return sheet_; };
+    Sprite& get_sprite() { return sprite_; };
     Vector2f get_visuals_position() const { return visuals_position_; };
     void set_visuals_position(Vector2f position) { visuals_position_ = position; };
+    float get_anim_frame() const { return anim_frame_; };
+    void set_anim_frame(float x) { anim_frame_ = x; };
     int get_anim_sheet_row() const { return anim_sheet_row_; };
     void set_anim_sheet_row(int row) { anim_sheet_row_ = row; };
+    int get_frame_w() const { return frame_w_; };
+    void set_frame_w(int pixels) { frame_w_ = pixels; };
+    int get_frame_h() const { return frame_h_; };
+    void set_frame_h(int pixels) { frame_h_ = pixels; };
     int get_anim_length() const { return anim_length_; };
     void set_anim_length(int length) { anim_length_ = length; };
     void printInfo() {};
@@ -32,11 +36,11 @@ public:
 private:
     Texture sheet_;
     Sprite sprite_;
-    float scale = 0.5f;
-    int frame_w = 140;
-    int frame_h = 140;
-    float anim_frame_ = 0.f;
     Vector2f visuals_position_;
+    float anim_frame_ = 0.f;
+    float scale = 0.5f;
+    int frame_w_ = 140;
+    int frame_h_ = 140;
     int anim_sheet_row_ = 0;
     int anim_length_ = 3;
 

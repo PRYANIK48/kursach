@@ -56,7 +56,14 @@ void Game::PollEvents() {
 }
 void Game::Update(float time) {
     this->PollEvents();
+<<<<<<< HEAD
     EntityInteractionSystem::UpdateEntities(time);
+=======
+
+    this->player_->Update(time);
+    //тест
+    this->enemy_->Update(time);
+>>>>>>> parent of a339588 (obed)
 }
 
 void Game::Render() {
@@ -64,7 +71,13 @@ void Game::Render() {
     
     this->window_->draw(room_sprite_);
 
+<<<<<<< HEAD
     EntityInteractionSystem::RenderEntities(this->window_);
+=======
+    this->player_->Render(this->window_);
+    //тест
+    this->enemy_->Render(this->window_);
+>>>>>>> parent of a339588 (obed)
 
     this->window_->display();
 }

@@ -17,20 +17,6 @@ void Game::InitWindow() {
     this->room_sprite_.setPosition((this->video_mode_.width - (room_texture_.getSize().x) * room_sprite_.getScale().x) / 2, (this->video_mode_.height - (room_texture_.getSize().y) * room_sprite_.getScale().y) / 2);
 
 }
-void Game::InitFonts()
-{
-    this->font.loadFromFile("Fonts/Anime Ace.ttf");
-}
-
-void Game::InitTexts()
-{
-    this->uiText.setFont(this->font);
-    this->uiText.setCharacterSize(25);
-    this->uiText.setFillColor(sf::Color::White);
-    this->uiText.setOutlineColor(sf::Color::Black);
-    this->uiText.setString("NONE");
-}
-
 void Game::InitPlayer() {
     this->player_ = new Player(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2));
 }
@@ -43,8 +29,6 @@ void Game::InitTester()
 Game::Game() {
     this->InitVariables();
     this->InitWindow();
-    this->InitFonts();
-    this->InitTexts();
     this->InitPlayer();
     this->InitTester();
 }
@@ -68,25 +52,8 @@ void Game::Update(float time) {
     this->PollEvents();
 
     this->player_->Update(time);
-
-    this->UpdateText();
-
     //тест
     this->enemy_->Update(time);
-}
-
-void Game::RenderText(sf::RenderTarget& target)
-{
-    target.draw(this->uiText);
-}
-
-void Game::UpdateText()
-{
-    std::stringstream ss;
-
-    ss << "Health:" << player_ -> getHealth();
-
-    this->uiText.setString(ss.str());
 }
 
 void Game::Render() {
@@ -98,9 +65,5 @@ void Game::Render() {
     //тест
     this->enemy_->Render(this->window_);
 
-    this->RenderText(*this->window_);
-
     this->window_->display();
 }
-
-

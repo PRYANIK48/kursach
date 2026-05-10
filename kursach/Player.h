@@ -14,8 +14,6 @@ public:
 
     void TryShoot();
 
-    float getHealth() const { return health_; };
-
     Vector2f get_position() const { return position_; };
 
 private:

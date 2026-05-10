@@ -21,7 +21,7 @@ void Player::InitVisuals()
     get_visuals().set_frame_h(140);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
     get_visuals().set_anim_sheet_row(1);
-    get_visuals().set_anim_length(3);
+    get_visuals().set_anim_length(4);
 }
 void Player::InitCollider()
 {

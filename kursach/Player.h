@@ -16,6 +16,7 @@ public:
     void TryShoot();
     void TryApplyDamage(float damage);
 
+<<<<<<< HEAD
     bool InIframe() const { return iframeCurrent_ > 0; };
 
     float get_iframeDuration() const { return iframeDuration_; };
@@ -26,7 +27,10 @@ public:
     float get_basicShootCooldown() const { return basicShootCooldown_; };
     void set_basicShootCooldown(float cooldown) { basicShootCooldown_ = cooldown; }
     float get_shootCooldown() const { return shootCooldown_; };
-    void set_shootCooldown(float cooldown) { shootCooldown_ = cooldown; };
+    void set_shootCooldown(float cooldown) { shootCooldown_ = cooldown; }
+=======
+    Vector2f get_position() const { return position_; };
+>>>>>>> parent of a339588 (obed)
 
 private:
     Projectile projectileTemplate_;

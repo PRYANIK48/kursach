@@ -1,8 +1,11 @@
 #pragma once
 #include<ctime>
 #include "Player.h" 
+<<<<<<< HEAD
 #include "Enemy.h"
+=======
 #include "Entity.h"
+>>>>>>> parent of a339588 (obed)
 using namespace sf;
 class Game
 {

@@ -9,11 +9,12 @@ void Projectile::InitVariables() {
 void Projectile::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().set_frame_w(140);
-    get_visuals().set_frame_h(140);
+    get_visuals().get_sheet().loadFromFile("Textures/ignatiy projectile.png");
+    get_visuals().set_frame_w(79);
+    get_visuals().set_frame_h(75);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
-    get_visuals().set_anim_sheet_row(1);
-    get_visuals().set_anim_length(3);
+    get_visuals().set_anim_sheet_row(0);
+    get_visuals().set_anim_length(1);
 }
 void Projectile::InitCollider()
 {
@@ -97,15 +98,15 @@ void Projectile::updateVisuals(float time)
             get_visuals().set_anim_sheet_row(0);
         }
         else {
-            get_visuals().set_anim_sheet_row(1);
+            get_visuals().set_anim_sheet_row(0);
         }
     }
     else {
         if (get_move_direction().x >= 0) {
-            get_visuals().set_anim_sheet_row(3);
+            get_visuals().set_anim_sheet_row(0);
         }
         else {
-            get_visuals().set_anim_sheet_row(2);
+            get_visuals().set_anim_sheet_row(0);
         }
     }
 

@@ -12,13 +12,13 @@ void Enemy::InitVariables() {
 void Enemy::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/player.png");
+    get_visuals().get_sheet().loadFromFile("Textures/lizard.png");
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(140);
     get_visuals().set_frame_h(140);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
     get_visuals().set_anim_sheet_row(1);
-    get_visuals().set_anim_length(3);
+    get_visuals().set_anim_length(4);
 }
 void Enemy::InitCollider()
 {

@@ -1,6 +1,7 @@
 #include "Game.h"
 #include <iostream>
 #include "EntityInteractionSystem.h"
+//#include "DebugSettings.h"
 
 void Game::InitVariables() {
     this->window_ = nullptr;
@@ -31,6 +32,7 @@ void Game::InitTester()
 }
 
 Game::Game() {
+    //DebugSettings::collidersVisuals = true;
     this->InitVariables();
     this->InitWindow();
     this->InitPlayer();

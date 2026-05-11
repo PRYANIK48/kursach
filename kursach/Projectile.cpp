@@ -60,7 +60,10 @@ void Projectile::Update(float time) {
 void Projectile::Render(RenderTarget* target) {
     get_visuals().printInfo();
     get_visuals().Render(target);
-    target->draw(get_collider());
+    if (DebugSettings::collidersVisuals)
+    {
+        target->draw(get_collider());
+    }
 }
 void Projectile::CheckCollision(Entity* entity)
 {

@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "EntityInteractionSystem.h";
+#include "DebugSettings.h"
 #include "Visuals.h"
 using namespace sf;
 class Entity

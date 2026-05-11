@@ -43,7 +43,10 @@ void Enemy::Update(float time) {
 void Enemy::Render(RenderTarget* target) {
     get_visuals().printInfo();
     get_visuals().Render(target);
-    target->draw(get_collider());
+    if (DebugSettings::collidersVisuals)
+    {
+        target->draw(get_collider());
+    }
 }
 void Enemy::CheckCollision(Entity* entity)
 {
@@ -82,7 +85,7 @@ void Enemy::onCollision(Entity* entity)
     if (auto* player = dynamic_cast<Player*>(entity)) {
         if (!player->InIframe())
         {
-        std::cout << "enemy in player" << std::endl;
+            std::cout << "enemy in player" << std::endl;
             player->TryApplyDamage(get_damage());
             player->AddImpulse(Vector2f(-1.f, 0.f));
         }

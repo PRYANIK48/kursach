@@ -29,7 +29,7 @@ void Player::InitCollider()
     get_collider().setOutlineColor(Color(50, 255, 50, 200));
     get_collider().setOutlineThickness(2.f);
     get_collider().setSize(Vector2f(60 * get_visuals().get_sprite().getScale().x, 60 * get_visuals().get_sprite().getScale().x));
-    get_collider().setOrigin(Vector2f(15,0));
+    get_collider().setOrigin(Vector2f(15, 0));
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
 Player::Player(Vector2f position) {
@@ -39,25 +39,21 @@ Player::Player(Vector2f position) {
     InitCollider();
 }
 void Player::Update(float time) {
-    if (get_health() > 0)
-    {
-        updateInput(time);
-        updatePosition(time);
-        updateVisuals(time);
-        set_move_direction(Vector2f(0.f, 0.f));
-        set_shootCooldown(get_shootCooldown() - time);
-        set_iframeCurrent(get_iframeCurrent() - time);
-    }
-    else
-    {
-        std::cout << "player dead" << std::endl;
-    }
+    updateInput(time);
+    updatePosition(time);
+    updateVisuals(time);
+    set_move_direction(Vector2f(0.f, 0.f));
+    set_shootCooldown(get_shootCooldown() - time);
+    set_iframeCurrent(get_iframeCurrent() - time);
 }
 
 void Player::Render(RenderTarget* target) {
     get_visuals().printInfo();
     get_visuals().Render(target);
-    target->draw(get_collider());
+    if (DebugSettings::collidersVisuals)
+    {
+        target->draw(get_collider());
+    }
 }
 
 void Player::CheckCollision(Entity* entity)
@@ -72,7 +68,6 @@ void Player::TryShoot()
 {
     if (get_shootCooldown() <= 0.f)
     {
-        std::cout << "shot" << std::endl;
         shoot();
         set_shootCooldown(get_basicShootCooldown());
     }
@@ -88,7 +83,6 @@ void Player::TryApplyDamage(float damage)
 
 void Player::shoot()
 {
-    std::cout << projectileTemplate_.get_visuals().get_sprite().getOrigin().x << std::endl;
     Projectile* p = new Projectile(projectileTemplate_, get_facing_direction(), get_position(), this);
     EntityInteractionSystem::AddEntity(p);
 }
@@ -163,7 +157,7 @@ void Player::updateVisuals(float time)
 {
     if (InIframe())
     {
-        get_visuals().get_sprite().setColor(Color(200,150,150,255));
+        get_visuals().get_sprite().setColor(Color(200, 150, 150, 255));
     }
     else
     {

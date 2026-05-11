@@ -1,7 +1,9 @@
 #include "Game.h"
 #include <iostream>
 #include "EntityInteractionSystem.h"
-//#include "DebugSettings.h"
+#include "DebugSettings.h"
+
+bool DebugSettings::collidersVisuals = false;
 
 void Game::InitVariables() {
     this->window_ = nullptr;
@@ -46,7 +48,6 @@ void Game::InitTester()
 }
 
 Game::Game() {
-    //DebugSettings::collidersVisuals = true;
     this->InitVariables();
     this->InitWindow();
     this->InitFonts();
@@ -66,6 +67,9 @@ void Game::PollEvents() {
         case Event::KeyPressed:
             if (this->event_.key.code == Keyboard::Escape) {
                 this->window_->close();
+            }
+            if (this->event_.key.code == Keyboard::P) {
+                DebugSettings::toggleCollidersVisuals();
             }
         }
     }

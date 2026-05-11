@@ -6,6 +6,12 @@ std::vector<Entity*> EntityInteractionSystem::pendingEntities;
 void EntityInteractionSystem::UpdateEntities(float time)
 {
     for (auto it = entities.begin(); it != entities.end(); ) {
+        if ((*it)->IsDead()) {
+            delete* it;
+            it = entities.erase(it);
+            continue;
+        }
+
         checkCollisions(*it);
         if ((*it)->IsDead()) {
             delete* it;

@@ -1,7 +1,8 @@
 #pragma once
 #include <vector>
-#include "Visuals.h"
+#include "Enemy.h"
 #include "Projectile.h"
+
 using namespace sf;
 
 class Player : public Entity
@@ -37,7 +38,7 @@ private:
     float shootCooldown_;
 
     void shoot();
-    void updateInput(float time) override;
+    void updateInput(float time);
     void updatePosition(float time) override;
     void updateVisuals(float time) override;
     void updateProjectileTemplate();

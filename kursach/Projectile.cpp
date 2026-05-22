@@ -1,30 +1,7 @@
 #include "Projectile.h"
-#include <iostream>
 #include "Player.h"
 #include "Enemy.h"
-void Projectile::InitVariables() {
-    set_move_speed(0.5f);
-    set_friction(0.f);
-}
-void Projectile::InitVisuals()
-{
-    get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/ignatiy projectile.png");
-    get_visuals().set_frame_w(79);
-    get_visuals().set_frame_h(75);
-    get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
-    get_visuals().set_anim_sheet_row(0);
-    get_visuals().set_anim_length(1);
-}
-void Projectile::InitCollider()
-{
-    get_collider().setFillColor(Color(100, 200, 100, 80));
-    get_collider().setOutlineColor(Color(50, 255, 50, 200));
-    get_collider().setOutlineThickness(2.f);
-    get_collider().setSize(Vector2f(40 * get_visuals().get_sprite().getScale().x, 40 * get_visuals().get_sprite().getScale().x));
-    get_collider().setOrigin(Vector2f(10,10));
-    get_collider().setPosition(get_visuals().get_visuals_position());
-}
+#include "Wall.h"
 Projectile::Projectile(Vector2f position, Vector2f direction, Entity* owner) {
     set_owner(owner);
     set_position(position);
@@ -46,16 +23,37 @@ Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f posit
     set_move_direction(direction);
     set_velocity(direction * get_move_speed());
 }
+void Projectile::InitVariables() {
+    set_move_speed(0.5f);
+    set_friction(0.f);
+}
+void Projectile::InitVisuals()
+{
+    get_visuals().SetPosition(get_position());
+    get_visuals().get_sheet().loadFromFile("Textures/ignatiy projectile.png");
+    get_visuals().set_frame_w(79);
+    get_visuals().set_frame_h(75);
+    get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
+    get_visuals().set_anim_sheet_row(0);
+    get_visuals().set_anim_length(1);
+}
+void Projectile::InitCollider()
+{
+    get_collider().setFillColor(Color(100, 200, 100, 80));
+    get_collider().setOutlineColor(Color(50, 255, 50, 200));
+    get_collider().setOutlineThickness(-2.f);
+    get_collider().setSize(Vector2f(40 * get_visuals().get_sprite().getScale().x, 40 * get_visuals().get_sprite().getScale().x));
+    get_collider().setOrigin(Vector2f(get_collider().getSize().x / 2, get_collider().getSize().y / 2));
+    get_collider().setPosition(get_visuals().get_visuals_position());
+}
 void Projectile::Update(float time) {
     if (get_life_time() < 0)
     {
         set_dead();
     }
-    set_life_time(get_life_time() -time);
+    set_life_time(get_life_time() - time);
 
-    updateInput(time);
-    updatePosition(time);
-    updateVisuals(time);
+    Entity::Update(time);
 }
 void Projectile::Render(RenderTarget* target) {
     get_visuals().printInfo();
@@ -73,8 +71,11 @@ void Projectile::CheckCollision(Entity* entity)
     }
 }
 
-void Projectile::updateInput(float time) {
+void Projectile::OnWallCollision(Entity* entity)
+{
+    set_dead();
 }
+
 void Projectile::updatePosition(float time) {
     set_velocity(get_velocity() + get_move_direction() * get_move_speed() * get_friction() * time * 0.01f);
     set_position(get_position() + get_velocity() * time);
@@ -120,24 +121,27 @@ void Projectile::updateVisuals(float time)
 void Projectile::onCollision(Entity* entity)
 {
     if (entity == get_owner()) {
-        std::cout << "projectile in ally" << std::endl;
     }
-    if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
+    else if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
         if (!IsDead())
         {
-            std::cout << "projectile in enemy" << std::endl;
-            enemy->AddImpulse(get_velocity());
+            enemy->AddImpulse(Vector2f(get_velocity().x / 2.f, get_velocity().y / 2.f));
             enemy->ApplyDamage(get_damage());
             set_dead();
         }
     }
-    if (auto* player = dynamic_cast<Player*>(entity)) {
+    else if (auto* wall = dynamic_cast<Wall*>(entity)) {
         if (!IsDead())
         {
-            std::cout << "projectile in player" << std::endl;
+            set_dead();
         }
     }
-    if (dynamic_cast<Entity*>(entity)) {
+    else if (auto* player = dynamic_cast<Player*>(entity)) {
+        if (!IsDead())
+        {
+        }
+    }
+    else if (dynamic_cast<Entity*>(entity)) {
         if (!IsDead())
         {
         }

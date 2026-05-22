@@ -1,5 +1,4 @@
 #pragma once
-#include "Visuals.h"
 #include "Entity.h"
 using namespace sf;
 class Projectile : public Entity
@@ -11,6 +10,7 @@ public:
     void Update(float time);
     void Render(RenderTarget* target);
     void CheckCollision(Entity* entity);
+    void OnWallCollision(Entity* entity) override;
 
     float get_life_time() const { return life_time_; };
     void set_life_time(float time) { life_time_ = time; };
@@ -21,7 +21,6 @@ private:
     Entity* owner_;
     float life_time_ = 800.f;
 
-    void updateInput(float time) override;
     void updatePosition(float time) override;
     void updateVisuals(float time) override;
 

@@ -1,12 +1,47 @@
 #include "Entity.h"
 void Entity::Update(float time) {
-    updateInput(time);
     updatePosition(time);
     updateVisuals(time);
 }
 void Entity::ApplyDamage(float damage)
 {
     set_health(get_health()-damage);
+}
+void Entity::PushOut(Entity* entity, float power)
+{
+    FloatRect entityBounds = entity->get_collider().getGlobalBounds();
+    FloatRect wallBounds = get_collider().getGlobalBounds();
+
+    Vector2f overlap(std::min(entityBounds.left + entityBounds.width - wallBounds.left,
+        wallBounds.left + wallBounds.width - entityBounds.left),
+        std::min(entityBounds.top + entityBounds.height - wallBounds.top,
+            wallBounds.top + wallBounds.height - entityBounds.top));
+
+    if (overlap.x < overlap.y)
+    {
+        if (entityBounds.left < wallBounds.left)
+        {
+            entity->set_position(Vector2f(entity->get_position().x - overlap.x * power, entity->get_position().y));
+        }
+        else
+        {
+            entity->set_position(Vector2f(entity->get_position().x + overlap.x * power, entity->get_position().y));
+        }
+        entity->set_velocity(Vector2f(entity->get_velocity().x * (1 - power), entity->get_velocity().y));
+    }
+    else
+    {
+        if (entityBounds.top < wallBounds.top)
+        {
+            entity->set_position(Vector2f(entity->get_position().x, entity->get_position().y - overlap.y * power));
+        }
+        else
+        {
+            entity->set_position(Vector2f(entity->get_position().x, entity->get_position().y + overlap.y * power));
+        }
+        entity->set_velocity(Vector2f(entity->get_velocity().x, entity->get_velocity().y * (1 - power)));
+    }
+    entity->get_collider().setPosition(entity->get_position());
 }
 void Entity::updatePosition(float time)
 {

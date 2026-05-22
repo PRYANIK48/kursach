@@ -3,6 +3,7 @@
 #include "Player.h" 
 #include "Enemy.h"
 #include "Entity.h"
+#include "Wall.h"
 #include "sstream"
 using namespace sf;
 
@@ -27,6 +28,8 @@ private:
 	VideoMode video_mode_;
 	Event event_;
 	Player* player_;
+	std::vector<Wall*> walls_;
+
 	Texture room_texture_;
 	Sprite room_sprite_;
 
@@ -39,6 +42,7 @@ private:
 	void InitFonts();
 	void InitTexts();
 	void InitPlayer();
+	void InitWalls();
 	void InitTester();
 	Enemy* enemy_;
 };

@@ -1,6 +1,13 @@
 #include "Player.h"
 #include <iostream>
-#include "Enemy.h"
+#include "Projectile.h"
+
+Player::Player(Vector2f position) {
+    set_position(position);
+    InitVariables();
+    InitVisuals();
+    InitCollider();
+}
 void Player::InitVariables() {
     set_basicShootCooldown(500.f);
     set_shootCooldown(0.f);
@@ -27,21 +34,14 @@ void Player::InitCollider()
 {
     get_collider().setFillColor(Color(100, 200, 100, 80));
     get_collider().setOutlineColor(Color(50, 255, 50, 200));
-    get_collider().setOutlineThickness(2.f);
+    get_collider().setOutlineThickness(-2.f);
     get_collider().setSize(Vector2f(60 * get_visuals().get_sprite().getScale().x, 60 * get_visuals().get_sprite().getScale().x));
-    get_collider().setOrigin(Vector2f(15, 0));
+    get_collider().setOrigin(Vector2f(get_collider().getSize().x / 2, 0));
     get_collider().setPosition(get_visuals().get_visuals_position());
-}
-Player::Player(Vector2f position) {
-    set_position(position);
-    InitVariables();
-    InitVisuals();
-    InitCollider();
 }
 void Player::Update(float time) {
     updateInput(time);
-    updatePosition(time);
-    updateVisuals(time);
+    Entity::Update(time);
     set_move_direction(Vector2f(0.f, 0.f));
     set_shootCooldown(get_shootCooldown() - time);
     set_iframeCurrent(get_iframeCurrent() - time);
@@ -177,7 +177,10 @@ void Player::updateProjectileTemplate()
 void Player::onCollision(Entity* entity)
 {
     if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
-        std::cout << "player in enemy" << std::endl;
+        if (InIframe())
+        {
+            PushOut(entity, 0.2f);
+        }
     }
     else if (dynamic_cast<Entity*>(entity)) {
     }

@@ -41,6 +41,25 @@ void Game::InitPlayer() {
     EntityInteractionSystem::AddEntity(this->player_);
 }
 
+void Game::InitWalls()
+{
+        Wall* wall = new Wall(Vector2f(this->video_mode_.width / 2 - 300, this->video_mode_.height / 2), Vector2f(80,400));
+        walls_.push_back(wall);
+        EntityInteractionSystem::AddEntity(wall);
+
+        wall = new Wall(Vector2f(this->video_mode_.width / 2 + 300, this->video_mode_.height / 2), Vector2f(80,400));
+        walls_.push_back(wall);
+        EntityInteractionSystem::AddEntity(wall);
+
+        wall = new Wall(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2 - 200), Vector2f(700,80));
+        walls_.push_back(wall);
+        EntityInteractionSystem::AddEntity(wall);
+
+        wall = new Wall(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2 + 200), Vector2f(700,80));
+        walls_.push_back(wall);
+        EntityInteractionSystem::AddEntity(wall);
+}
+
 void Game::InitTester()
 {
     this->enemy_ = new Enemy(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100));
@@ -53,6 +72,7 @@ Game::Game() {
     this->InitFonts();
     this->InitTexts();
     this->InitPlayer();
+    this->InitWalls();
     this->InitTester();
 }
 const bool Game::getWindowIsOpen() const {
@@ -95,7 +115,7 @@ void Game::UpdateText()
 
 void Game::Render() {
     this->window_->clear(Color(150, 150, 150));
-    
+
     this->window_->draw(room_sprite_);
 
     EntityInteractionSystem::RenderEntities(this->window_);

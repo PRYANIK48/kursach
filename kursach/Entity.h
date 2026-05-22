@@ -14,7 +14,9 @@ public:
     virtual void Render(RenderTarget* target) = 0;
     virtual void CheckCollision(Entity* entity) = 0;
     virtual void ApplyDamage(float damage);
+    virtual void OnWallCollision(Entity* entity) {};
 
+    virtual void PushOut(Entity* entity, float power = 1);
     void AddImpulse(Vector2f force) { velocity_ += force; };
 
     Visuals& get_visuals() { return visuals_; };
@@ -72,7 +74,6 @@ private:
 
     bool isDead_ = false;
 
-    virtual void updateInput(float time) = 0;
     virtual void updatePosition(float time);
     virtual void updateVisuals(float time);
 

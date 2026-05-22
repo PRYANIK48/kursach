@@ -15,7 +15,7 @@ void Player::InitVariables() {
     set_iframeCurrent(0.f);
     set_move_speed(0.2f);
     set_damage(1.f);
-    set_maxHealth(10.f);
+    set_maxHealth(30.f);
     set_health(get_maxHealth());
     updateProjectileTemplate();
 }

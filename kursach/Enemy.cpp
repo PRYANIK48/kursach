@@ -76,7 +76,7 @@ void Enemy::updateVisuals(float time) {
 void Enemy::onCollision(Entity* entity)
 {
     if (auto* player = dynamic_cast<Player*>(entity)) {
-        PushOut(entity, 0.2f);
+        PushOut(entity, 0.05f);
         if (!player->InIframe())
         {
             player->TryApplyDamage(get_damage());

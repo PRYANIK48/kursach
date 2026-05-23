@@ -44,7 +44,7 @@ public:
     void set_maxHealth(float health) { maxHealth_ = health; };
     float get_health() const { return health_; };
     void set_health(float health);
-    bool IsDead() const { return isDead_; };
+    bool IsDead() const { return is_dead_; };
     void set_dead();
     bool IsReadyToDelete() const { return ready_to_delete_; };
     void set_ready_to_delete() { ready_to_delete_ = true; };
@@ -64,7 +64,7 @@ private:
     float maxHealth_ = 0.f;
     float health_ = 0.f;
 
-    bool isDead_ = false;
+    bool is_dead_ = false;
     bool ready_to_delete_ = false;
 
     virtual void updatePosition(float time);

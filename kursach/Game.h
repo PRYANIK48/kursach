@@ -30,6 +30,7 @@ public:
 private:
 	Vector2u window_resolution_;
 
+	Room room_;
     View view_;
 	VideoMode video_mode_;
 	RenderWindow window_;
@@ -47,6 +48,7 @@ private:
 	void InitWindow();
 	void InitFonts();
 	void InitTexts();
+	void InitRoom();
 	void InitPlayer();
 	void InitWalls();
 	void InitTester();

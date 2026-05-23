@@ -66,7 +66,7 @@ void Entity::set_health(float health)
 }
 void Entity::set_dead()
 {
-    isDead_ = true;
+    is_dead_ = true;
     onDeath();
 }
 void Entity::updatePosition(float time)

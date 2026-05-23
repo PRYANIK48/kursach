@@ -34,6 +34,11 @@ void EntityInteractionSystem::UpdateEntities(float time)
 
 void EntityInteractionSystem::RenderEntities(sf::RenderTarget* target)
 {
+    std::sort(entities.begin(),entities.end(), [](Entity* a, Entity* b)
+        {
+            return a->get_position().y < b->get_position().y;
+        }
+    );
     for (auto it = entities.begin(); it != entities.end(); ) {
         (*it)->Render(target);
         ++it;

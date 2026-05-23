@@ -3,40 +3,40 @@
 bool DebugSettings::collidersVisuals = false;
 
 void Game::InitVariables() {
-    this->player_ = nullptr;
+    player_ = nullptr;
 }
 void Game::InitWindow() {
-    this->window_resolution_ = Vector2u(1280, 720);
-    this->view_.setCenter(0, 0);
-    this->view_.setSize(Vector2f(window_resolution_));
-    this->video_mode_.width = this->view_.getSize().x;
-    this->video_mode_.height = this->view_.getSize().y;
-    this->window_.create(this->video_mode_, "GameName", Style::Titlebar | Style::Close);
-    this->window_.setVerticalSyncEnabled(true);
+    window_resolution_ = Vector2u(1280, 720);
+    view_.setCenter(0, 0);
+    view_.setSize(Vector2f(window_resolution_));
+    video_mode_.width = view_.getSize().x;
+    video_mode_.height = view_.getSize().y;
+    window_.create(video_mode_, "GameName", Style::Titlebar | Style::Close);
+    window_.setVerticalSyncEnabled(true);
 
-    this->room_texture_.loadFromFile("Textures/room.png");
-    this->room_sprite_.setTexture(room_texture_);
-    this->room_sprite_.setScale(0.5, 0.5);
-    this->room_sprite_.setOrigin(room_sprite_.getLocalBounds().width / 2, room_sprite_.getLocalBounds().height / 2);
+    room_texture_.loadFromFile("Textures/room.png");
+    room_sprite_.setTexture(room_texture_);
+    room_sprite_.setScale(0.5, 0.5);
+    room_sprite_.setOrigin(room_sprite_.getLocalBounds().width / 2, room_sprite_.getLocalBounds().height / 2);
 }
 void Game::InitFonts()
 {
-    this->font.loadFromFile("Fonts/Anime Ace.ttf");
+    font.loadFromFile("Fonts/Anime Ace.ttf");
 }
 
 void Game::InitTexts()
 {
-    this->uiText.setFont(this->font);
-    this->uiText.setCharacterSize(25);
-    this->uiText.setFillColor(sf::Color::White);
-    this->uiText.setOutlineColor(sf::Color::Black);
-    this->uiText.setString("NONE");
+    uiText.setFont(font);
+    uiText.setCharacterSize(25);
+    uiText.setFillColor(sf::Color::White);
+    uiText.setOutlineColor(sf::Color::Black);
+    uiText.setString("NONE");
 }
 
 void Game::InitPlayer() {
 
-    this->player_ = new Player(Vector2f(0, 0));
-    EntityInteractionSystem::AddEntity(this->player_);
+    player_ = new Player(Vector2f(0, 0));
+    EntityInteractionSystem::AddEntity(player_);
 }
 
 void Game::InitWalls()
@@ -60,33 +60,33 @@ void Game::InitWalls()
 
 void Game::InitTester()
 {
-    this->enemy_ = new Enemy(Vector2f(200, 100), this->player_);
-    EntityInteractionSystem::AddEntity(this->enemy_);
+    enemy_ = new Enemy(Vector2f(200, 100), player_);
+    EntityInteractionSystem::AddEntity(enemy_);
 }
 
 Game::Game() {
-    this->InitVariables();
-    this->InitWindow();
-    this->InitFonts();
-    this->InitTexts();
-    this->InitPlayer();
-    this->InitWalls();
-    this->InitTester();
+    InitVariables();
+    InitWindow();
+    InitFonts();
+    InitTexts();
+    InitPlayer();
+    InitWalls();
+    InitTester();
 }
 const bool Game::getWindowIsOpen() const {
-    return this->window_.isOpen();
+    return window_.isOpen();
 }
 void Game::PollEvents() {
-    while (this->window_.pollEvent(this->event_)) {
-        switch (this->event_.type) {
+    while (window_.pollEvent(event_)) {
+        switch (event_.type) {
         case Event::Closed:
-            this->window_.close();
+            window_.close();
             break;
         case Event::KeyPressed:
-            if (this->event_.key.code == Keyboard::Escape) {
-                this->window_.close();
+            if (event_.key.code == Keyboard::Escape) {
+                window_.close();
             }
-            if (this->event_.key.code == Keyboard::P) {
+            if (event_.key.code == Keyboard::P) {
                 DebugSettings::toggleCollidersVisuals();
             }
         }
@@ -99,7 +99,7 @@ void Game::Update(float time) {
 }
 void Game::RenderText(sf::RenderTarget& target)
 {
-    target.draw(this->uiText);
+    target.draw(uiText);
 }
 
 void Game::UpdateText()
@@ -108,17 +108,18 @@ void Game::UpdateText()
 
     ss << "Health:" << player_->get_health();
 
-    this->uiText.setString(ss.str());
+    uiText.setString(ss.str());
 }
 
 void Game::Render() {
     //view_.move(2, 2);
-    this->window_.setView(view_);
-    this->window_.clear(Color(150, 150, 150));
-    this->window_.draw(room_sprite_);
-
-    EntityInteractionSystem::RenderEntities(&this->window_);
+    window_.setView(view_);
+    window_.clear(Color(150, 150, 150));
+    //window_.draw(room_sprite_);
+    room_.Render(&window_);
+    std::cout << "rend" << std::endl;
+    EntityInteractionSystem::RenderEntities(&window_);
     window_.setView(window_.getDefaultView());
-    this->RenderText(this->window_);
-    this->window_.display();
+    RenderText(window_);
+    window_.display();
 }

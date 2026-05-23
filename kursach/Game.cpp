@@ -62,7 +62,7 @@ void Game::InitWalls()
 
 void Game::InitTester()
 {
-    this->enemy_ = new Enemy(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100));
+    this->enemy_ = new Enemy(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100), this->player_);
     EntityInteractionSystem::AddEntity(this->enemy_);
 }
 

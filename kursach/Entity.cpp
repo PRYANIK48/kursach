@@ -2,6 +2,14 @@
 void Entity::Update(float time) {
     updatePosition(time);
     updateVisuals(time);
+    set_move_direction(Vector2f(0.f, 0.f));
+}
+void Entity::CheckCollision(Entity* entity)
+{
+    if (get_collider().getGlobalBounds().intersects(entity->get_collider().getGlobalBounds()))
+    {
+        onCollision(entity);
+    }
 }
 void Entity::ApplyDamage(float damage)
 {
@@ -57,7 +65,6 @@ void Entity::updatePosition(float time)
         set_velocity(Vector2f(get_velocity().x, 0.f));
     }
     get_collider().setPosition(get_position());
-    set_move_direction(Vector2f(0.f, 0.f));
 }
 void Entity::updateVisuals(float time)
 {

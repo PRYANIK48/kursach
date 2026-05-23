@@ -42,7 +42,6 @@ void Player::InitCollider()
 void Player::Update(float time) {
     updateInput(time);
     Entity::Update(time);
-    set_move_direction(Vector2f(0.f, 0.f));
     set_shootCooldown(get_shootCooldown() - time);
     set_iframeCurrent(get_iframeCurrent() - time);
 }
@@ -53,14 +52,6 @@ void Player::Render(RenderTarget* target) {
     if (DebugSettings::collidersVisuals)
     {
         target->draw(get_collider());
-    }
-}
-
-void Player::CheckCollision(Entity* entity)
-{
-    if (get_collider().getGlobalBounds().intersects(entity->get_collider().getGlobalBounds()))
-    {
-        onCollision(entity);
     }
 }
 
@@ -99,10 +90,8 @@ void Player::updateInput(float time) {
     else if (Keyboard::isKeyPressed(Keyboard::S)) {
         set_move_direction(Vector2f(get_move_direction().x, 1.f));
     }
-    if (abs(get_move_direction().x) > 0 || abs(get_move_direction().y) > 0) {
-        if (abs(get_move_direction().x) > 0 && abs(get_move_direction().y) > 0) {
-            set_move_direction(get_move_direction() / sqrt(get_move_direction().x * get_move_direction().x + get_move_direction().y * get_move_direction().y));
-        }
+    if (GMath::Length(get_move_direction()) > 0.01) {
+        set_move_direction(GMath::Normalize(get_move_direction()));
         get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_move_speed() * 0.04f * time);
         if (get_visuals().get_anim_frame() > get_visuals().get_anim_length()) {
             get_visuals().set_anim_frame(get_visuals().get_anim_frame() - get_visuals().get_anim_length());
@@ -130,7 +119,7 @@ void Player::updateInput(float time) {
         }
     }
     else {
-        get_visuals().set_anim_frame(0);
+        get_visuals().set_anim_frame(0.9);
     }
 
     if (Keyboard::isKeyPressed(Keyboard::F))

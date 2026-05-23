@@ -2,6 +2,7 @@
 #include <vector>
 #include "EntityInteractionSystem.h";
 #include "DebugSettings.h"
+#include "GMath.h"
 #include "Visuals.h"
 using namespace sf;
 class Entity
@@ -12,7 +13,7 @@ public:
 
     virtual void Update(float time) = 0;
     virtual void Render(RenderTarget* target) = 0;
-    virtual void CheckCollision(Entity* entity) = 0;
+    virtual void CheckCollision(Entity* entity);
     virtual void ApplyDamage(float damage);
     virtual void OnWallCollision(Entity* entity) {};
 

@@ -12,7 +12,6 @@ public:
 
     void Update(float time);
     void Render(RenderTarget* target);
-    void CheckCollision(Entity* entity);
 
     void TryShoot();
     void TryApplyDamage(float damage);

@@ -4,6 +4,7 @@ void Visuals::InitVariables() {
     this->sheet_.loadFromFile("Textures/player.png");
     this->sprite_.setTexture(sheet_);
     this->sprite_.setTextureRect(IntRect(0, 0, frame_w_, frame_h_));
+    this->sprite_.setOrigin(frame_w_ / 2, frame_h_ / 2);
     this->sprite_.setPosition(visuals_position_);
     this->sprite_.setScale(scale, scale);
 }

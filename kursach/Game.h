@@ -1,9 +1,13 @@
 #pragma once
 #include<ctime>
+#include <iostream>
+#include "EntityInteractionSystem.h"
+#include "DebugSettings.h"
 #include "Player.h" 
 #include "Enemy.h"
 #include "Entity.h"
 #include "Wall.h"
+#include "Room.h"
 #include "sstream"
 using namespace sf;
 
@@ -24,11 +28,13 @@ public:
 	void UpdateText();
 
 private:
-	RenderWindow* window_;
+	Vector2u window_resolution_;
+
+    View view_;
 	VideoMode video_mode_;
+	RenderWindow window_;
 	Event event_;
 	Player* player_;
-	std::vector<Wall*> walls_;
 
 	Texture room_texture_;
 	Sprite room_sprite_;
@@ -44,6 +50,7 @@ private:
 	void InitPlayer();
 	void InitWalls();
 	void InitTester();
+	std::vector<Wall*> walls_;
 	Enemy* enemy_;
 };
 

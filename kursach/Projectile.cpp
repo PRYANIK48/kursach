@@ -139,6 +139,9 @@ void Projectile::onCollision(Entity* entity)
     else if (auto* player = dynamic_cast<Player*>(entity)) {
         if (!IsDead())
         {
+            player->AddImpulse(Vector2f(get_velocity().x / 2.f, get_velocity().y / 2.f));
+            player->ApplyDamage(get_damage());
+            set_dead();
         }
     }
     else if (dynamic_cast<Entity*>(entity)) {

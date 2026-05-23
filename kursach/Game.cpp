@@ -1,25 +1,23 @@
 #include "Game.h"
-#include <iostream>
-#include "EntityInteractionSystem.h"
-#include "DebugSettings.h"
 
 bool DebugSettings::collidersVisuals = false;
 
 void Game::InitVariables() {
-    this->window_ = nullptr;
     this->player_ = nullptr;
 }
 void Game::InitWindow() {
-    this->video_mode_.width = 16 * 75;
-    this->video_mode_.height = 9 * 75;
-    this->window_ = new RenderWindow(this->video_mode_, "GameName", Style::Titlebar | Style::Close);
-    this->window_->setVerticalSyncEnabled(true);
+    this->window_resolution_ = Vector2u(1280, 720);
+    this->view_.setCenter(0, 0);
+    this->view_.setSize(Vector2f(window_resolution_));
+    this->video_mode_.width = this->view_.getSize().x;
+    this->video_mode_.height = this->view_.getSize().y;
+    this->window_.create(this->video_mode_, "GameName", Style::Titlebar | Style::Close);
+    this->window_.setVerticalSyncEnabled(true);
 
     this->room_texture_.loadFromFile("Textures/room.png");
     this->room_sprite_.setTexture(room_texture_);
     this->room_sprite_.setScale(0.5, 0.5);
-    this->room_sprite_.setPosition((this->video_mode_.width - (room_texture_.getSize().x) * room_sprite_.getScale().x) / 2, (this->video_mode_.height - (room_texture_.getSize().y) * room_sprite_.getScale().y) / 2);
-
+    this->room_sprite_.setOrigin(room_sprite_.getLocalBounds().width / 2, room_sprite_.getLocalBounds().height / 2);
 }
 void Game::InitFonts()
 {
@@ -37,32 +35,32 @@ void Game::InitTexts()
 
 void Game::InitPlayer() {
 
-    this->player_ = new Player(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2));
+    this->player_ = new Player(Vector2f(0, 0));
     EntityInteractionSystem::AddEntity(this->player_);
 }
 
 void Game::InitWalls()
 {
-        Wall* wall = new Wall(Vector2f(this->video_mode_.width / 2 - 300, this->video_mode_.height / 2), Vector2f(80,400));
-        walls_.push_back(wall);
-        EntityInteractionSystem::AddEntity(wall);
+    Wall* wall = new Wall(Vector2f(-300, 0), Vector2f(80, 400));
+    walls_.push_back(wall);
+    EntityInteractionSystem::AddEntity(wall);
 
-        wall = new Wall(Vector2f(this->video_mode_.width / 2 + 300, this->video_mode_.height / 2), Vector2f(80,400));
-        walls_.push_back(wall);
-        EntityInteractionSystem::AddEntity(wall);
+    wall = new Wall(Vector2f(300, 0), Vector2f(80, 400));
+    walls_.push_back(wall);
+    EntityInteractionSystem::AddEntity(wall);
 
-        wall = new Wall(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2 - 200), Vector2f(700,80));
-        walls_.push_back(wall);
-        EntityInteractionSystem::AddEntity(wall);
+    wall = new Wall(Vector2f(0, -200), Vector2f(700, 80));
+    walls_.push_back(wall);
+    EntityInteractionSystem::AddEntity(wall);
 
-        wall = new Wall(Vector2f(this->video_mode_.width / 2, this->video_mode_.height / 2 + 200), Vector2f(700,80));
-        walls_.push_back(wall);
-        EntityInteractionSystem::AddEntity(wall);
+    wall = new Wall(Vector2f(0, 200), Vector2f(700, 80));
+    walls_.push_back(wall);
+    EntityInteractionSystem::AddEntity(wall);
 }
 
 void Game::InitTester()
 {
-    this->enemy_ = new Enemy(Vector2f(this->video_mode_.width / 2 + 200, this->video_mode_.height / 2 + 100), this->player_);
+    this->enemy_ = new Enemy(Vector2f(200, 100), this->player_);
     EntityInteractionSystem::AddEntity(this->enemy_);
 }
 
@@ -76,17 +74,17 @@ Game::Game() {
     this->InitTester();
 }
 const bool Game::getWindowIsOpen() const {
-    return this->window_->isOpen();
+    return this->window_.isOpen();
 }
 void Game::PollEvents() {
-    while (this->window_->pollEvent(this->event_)) {
+    while (this->window_.pollEvent(this->event_)) {
         switch (this->event_.type) {
         case Event::Closed:
-            this->window_->close();
+            this->window_.close();
             break;
         case Event::KeyPressed:
             if (this->event_.key.code == Keyboard::Escape) {
-                this->window_->close();
+                this->window_.close();
             }
             if (this->event_.key.code == Keyboard::P) {
                 DebugSettings::toggleCollidersVisuals();
@@ -114,11 +112,13 @@ void Game::UpdateText()
 }
 
 void Game::Render() {
-    this->window_->clear(Color(150, 150, 150));
+    //view_.move(2, 2);
+    this->window_.setView(view_);
+    this->window_.clear(Color(150, 150, 150));
+    this->window_.draw(room_sprite_);
 
-    this->window_->draw(room_sprite_);
-
-    EntityInteractionSystem::RenderEntities(this->window_);
-    this->RenderText(*this->window_);
-    this->window_->display();
+    EntityInteractionSystem::RenderEntities(&this->window_);
+    window_.setView(window_.getDefaultView());
+    this->RenderText(this->window_);
+    this->window_.display();
 }

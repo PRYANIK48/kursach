@@ -42,6 +42,7 @@ private:
     void updateVisuals(float time) override;
     void updateProjectileTemplate();
 
+    void onDeath() override;
     void onCollision(Entity* entity) override;
     void InitVariables() override;
     void InitVisuals() override;

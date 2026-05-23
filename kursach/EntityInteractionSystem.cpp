@@ -6,21 +6,21 @@ std::vector<Entity*> EntityInteractionSystem::pendingEntities;
 void EntityInteractionSystem::UpdateEntities(float time)
 {
     for (auto it = entities.begin(); it != entities.end(); ) {
-        if ((*it)->IsDead()) {
+        if ((*it)->IsReadyToDelete()) {
             delete* it;
             it = entities.erase(it);
             continue;
         }
 
         checkCollisions(*it);
-        if ((*it)->IsDead()) {
+        if ((*it)->IsReadyToDelete()) {
             delete* it;
             it = entities.erase(it);
             continue;
         }
 
         (*it)->Update(time);
-        if ((*it)->IsDead()) {
+        if ((*it)->IsReadyToDelete()) {
             delete* it;
             it = entities.erase(it);
         }
@@ -44,7 +44,7 @@ void EntityInteractionSystem::checkCollisions(Entity* entity)
 {
     for (auto it = entities.begin(); it != entities.end(); ) {
         entity->CheckCollision(*it);
-        if ((*it)->IsDead()) {
+        if ((*it)->IsReadyToDelete()) {
             break;
         }
         ++it;

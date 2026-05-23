@@ -51,6 +51,24 @@ void Entity::PushOut(Entity* entity, float power)
     }
     entity->get_collider().setPosition(entity->get_position());
 }
+void Entity::set_health(float health)
+{
+    health_ = health;
+    if (health > maxHealth_)
+    {
+        health = maxHealth_;
+    }
+    else if (health <= 0)
+    {
+        health = 0;
+        set_dead();
+    }
+}
+void Entity::set_dead()
+{
+    isDead_ = true;
+    onDeath();
+}
 void Entity::updatePosition(float time)
 {
     set_velocity(get_velocity() + get_move_direction() * get_move_speed() * get_friction() * time * 0.01f);
@@ -70,4 +88,9 @@ void Entity::updateVisuals(float time)
 {
     get_visuals().SetPosition(get_position());
     get_visuals().UpdateSprite();
+}
+
+void Entity::onDeath()
+{
+    set_ready_to_delete();
 }

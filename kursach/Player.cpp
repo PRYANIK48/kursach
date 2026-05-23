@@ -163,6 +163,12 @@ void Player::updateProjectileTemplate()
     projectileTemplate_.set_life_time(800.f);
 }
 
+void Player::onDeath()
+{
+    std::cout << "player dead" << std::endl;
+    //set_ready_to_delete();
+}
+
 void Player::onCollision(Entity* entity)
 {
     if (auto* enemy = dynamic_cast<Enemy*>(entity)) {

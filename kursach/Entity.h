@@ -43,20 +43,11 @@ public:
     float get_maxHealth() const { return maxHealth_; };
     void set_maxHealth(float health) { maxHealth_ = health; };
     float get_health() const { return health_; };
-    void set_health(float health) {
-        health_ = health; 
-        if (health > maxHealth_)
-        {
-            health = maxHealth_;
-        }
-        else if (health <= 0)
-        {
-            health = 0;
-            set_dead();
-        }
-    };
+    void set_health(float health);
     bool IsDead() const { return isDead_; };
-    void set_dead() { isDead_ = true; };
+    void set_dead();
+    bool IsReadyToDelete() const { return ready_to_delete_; };
+    void set_ready_to_delete() { ready_to_delete_ = true; };
 
 private:
 
@@ -74,10 +65,12 @@ private:
     float health_ = 0.f;
 
     bool isDead_ = false;
+    bool ready_to_delete_ = false;
 
     virtual void updatePosition(float time);
     virtual void updateVisuals(float time);
 
+    virtual void onDeath();
     virtual void onCollision(Entity* entity) = 0;
     virtual void InitVariables() = 0;
     virtual void InitVisuals() = 0;

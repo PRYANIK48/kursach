@@ -4,6 +4,8 @@ Door::Door(Vector2f position, Vector2f facing)
 {
     set_position(position);
     set_facing_direction(facing);
+    set_open(true);
+    try_open(false);
     InitVariables();
     InitVisuals();
     InitCollider();
@@ -14,29 +16,29 @@ void Door::InitVariables() {
 void Door::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/lizard.png");
+    get_visuals().get_sheet().loadFromFile("Textures/door.png");
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
-    get_visuals().set_frame_w(140);
-    get_visuals().set_frame_h(140);
+    get_visuals().set_frame_w(200);
+    get_visuals().set_frame_h(200);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
 
     if (abs(get_facing_direction().y) > abs(get_facing_direction().x)) {
         if (get_facing_direction().y <= 0) {
-            get_visuals().set_anim_sheet_row(0);
+            get_visuals().set_anim_sheet_row(2);
         }
         else {
-            get_visuals().set_anim_sheet_row(1);
+            get_visuals().set_anim_sheet_row(0);
         }
     }
     else {
         if (get_facing_direction().x >= 0) {
-            get_visuals().set_anim_sheet_row(3);
+            get_visuals().set_anim_sheet_row(1);
         }
         else {
-            get_visuals().set_anim_sheet_row(2);
+            get_visuals().set_anim_sheet_row(3);
         }
     }
-    get_visuals().set_anim_length(1);
+    get_visuals().set_anim_length(6);
     get_visuals().UpdateSprite();
 }
 void Door::InitCollider()
@@ -50,14 +52,7 @@ void Door::InitCollider()
 }
 void Door::Update(float time)
 {
-    if (true)
-    {
-        get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_move_speed() * 0.04f * time);
-    }
-    else
-    {
-
-    }
+    updateVisuals(time);
 }
 void Door::Render(RenderTarget* target)
 {
@@ -75,16 +70,30 @@ void Door::try_open(bool state)
     else if (state)
     {
         set_open(state);
+        set_opening_direction(-1);
         onOpen();
     }
     else
     {
         set_open(state);
+        set_opening_direction(1);
         onClose();
     }
 }
+void Door::updateVisuals(float time)
+{
+    if (get_opening_direction() != 0)
+    {
+        get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_opening_direction() * 0.02f * time);
+        if ((get_visuals().get_anim_frame() < 0) || (get_visuals().get_anim_frame() > get_visuals().get_anim_length())) {
+            set_opening_direction(0);
+        }
+    }
+    get_visuals().UpdateSprite();
+}
 void Door::onOpen()
 {
+    //звучёк
 }
 void Door::onClose()
 {

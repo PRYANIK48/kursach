@@ -33,29 +33,16 @@ void Game::InitTexts()
     uiText.setString("NONE");
 }
 
+void Game::InitRoom()
+{
+    RoomTemplates::InitTemplates();
+    room_.GenerateRoom(Vector2f(0.f, 0.f), 0);
+}
+
 void Game::InitPlayer() {
 
     player_ = new Player(Vector2f(0, 0));
     EntityInteractionSystem::AddEntity(player_);
-}
-
-void Game::InitWalls()
-{
-    Wall* wall = new Wall(Vector2f(-300, 0), Vector2f(80, 400));
-    walls_.push_back(wall);
-    EntityInteractionSystem::AddEntity(wall);
-
-    wall = new Wall(Vector2f(300, 0), Vector2f(80, 400));
-    walls_.push_back(wall);
-    EntityInteractionSystem::AddEntity(wall);
-
-    wall = new Wall(Vector2f(0, -200), Vector2f(700, 80));
-    walls_.push_back(wall);
-    EntityInteractionSystem::AddEntity(wall);
-
-    wall = new Wall(Vector2f(0, 200), Vector2f(700, 80));
-    walls_.push_back(wall);
-    EntityInteractionSystem::AddEntity(wall);
 }
 
 void Game::InitTester()
@@ -69,8 +56,8 @@ Game::Game() {
     InitWindow();
     InitFonts();
     InitTexts();
+    InitRoom();
     InitPlayer();
-    InitWalls();
     InitTester();
 }
 const bool Game::getWindowIsOpen() const {
@@ -117,7 +104,6 @@ void Game::Render() {
     window_.clear(Color(150, 150, 150));
     //window_.draw(room_sprite_);
     room_.Render(&window_);
-    std::cout << "rend" << std::endl;
     EntityInteractionSystem::RenderEntities(&window_);
     window_.setView(window_.getDefaultView());
     RenderText(window_);

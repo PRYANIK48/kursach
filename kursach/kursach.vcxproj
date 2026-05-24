@@ -141,6 +141,8 @@
     <ClCompile Include="Projectile.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="Room.cpp" />
+    <ClCompile Include="RoomTemplate.cpp" />
+    <ClCompile Include="RoomTemplates.cpp" />
     <ClCompile Include="Visuals.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -156,6 +158,8 @@
     <ClInclude Include="Projectile.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="Room.h" />
+    <ClInclude Include="RoomTemplate.h" />
+    <ClInclude Include="RoomTemplates.h" />
     <ClInclude Include="Visuals.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>

@@ -50,7 +50,6 @@ private:
 	void InitTexts();
 	void InitRoom();
 	void InitPlayer();
-	void InitWalls();
 	void InitTester();
 	std::vector<Wall*> walls_;
 	Enemy* enemy_;

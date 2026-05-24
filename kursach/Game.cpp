@@ -14,19 +14,22 @@ void Game::InitWindow() {
     window_.create(video_mode_, "GameName", Style::Titlebar | Style::Close);
     window_.setVerticalSyncEnabled(true);
 }
-void Game::InitFonts()
+
+
+HUDData Game::GetHUDData() const
 {
-    font.loadFromFile("Fonts/Anime Ace.ttf");
+    HUDData data;
+
+    data.hp = player_->get_health();
+    data.max_hp = player_->get_health();
+    data.damage = player_->get_damage();
+    data.firerate = player_->get_basicShootCooldown();
+    data.speed = player_->get_move_speed();
+    data.roomsCleared = room_.get_room_number_();
+    return data;
 }
 
-void Game::InitTexts()
-{
-    uiText.setFont(font);
-    uiText.setCharacterSize(25);
-    uiText.setFillColor(sf::Color::White);
-    uiText.setOutlineColor(sf::Color::Black);
-    uiText.setString("NONE");
-}
+
 
 void Game::InitRoom()
 {
@@ -49,11 +52,10 @@ void Game::InitTester()
 Game::Game() {
     InitVariables();
     InitWindow();
-    InitFonts();
-    InitTexts();
     InitPlayer();
     InitRoom();
     InitTester();
+    ui_.Init();
 }
 const bool Game::getWindowIsOpen() const {
     return window_.isOpen();
@@ -76,32 +78,19 @@ void Game::PollEvents() {
 }
 void Game::Update(float time) {
     PollEvents();
-    UpdateText();
+    ui_.Update(GetHUDData());
     EntityInteractionSystem::UpdateEntities(time);
     room_.CheckEnemies();
-}
-void Game::RenderText(sf::RenderTarget& target)
-{
-    target.draw(uiText);
-}
-
-void Game::UpdateText()
-{
-    std::stringstream ss;
-
-    ss << "Health:" << player_->get_health();
-
-    uiText.setString(ss.str());
 }
 
 void Game::Render() {
     //view_.move(2, 2);
     window_.setView(view_);
-    window_.clear(Color(150, 150, 150));
+    window_.clear(Color(0, 0, 0));
     //window_.draw(room_sprite_);
     room_.Render(&window_);
     EntityInteractionSystem::RenderEntities(&window_);
+    ui_.Render(window_);
     window_.setView(window_.getDefaultView());
-    RenderText(window_);
     window_.display();
 }

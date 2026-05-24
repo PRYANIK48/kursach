@@ -146,6 +146,7 @@
     <ClCompile Include="RoomTemplate.cpp" />
     <ClCompile Include="RoomTemplates.cpp" />
     <ClCompile Include="Stone.cpp" />
+    <ClCompile Include="UI.cpp" />
     <ClCompile Include="Visuals.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
@@ -158,6 +159,7 @@
     <ClInclude Include="EntityInteractionSystem.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GMath.h" />
+    <ClInclude Include="HUDData.h" />
     <ClInclude Include="Pit.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />
@@ -166,6 +168,7 @@
     <ClInclude Include="RoomTemplate.h" />
     <ClInclude Include="RoomTemplates.h" />
     <ClInclude Include="Stone.h" />
+    <ClInclude Include="UI.h" />
     <ClInclude Include="Visuals.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>

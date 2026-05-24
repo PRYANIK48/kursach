@@ -9,12 +9,9 @@
 #include "Wall.h"
 #include "Room.h"
 #include "sstream"
+#include "UI.h"
 using namespace sf;
 
-class UI
-{
-
-};
 
 class Game
 {
@@ -23,13 +20,12 @@ public:
 	const bool getWindowIsOpen() const;
 	void PollEvents();
 	void Update(float time);
+	HUDData GetHUDData() const;
 	void Render();
-	void RenderText(sf::RenderTarget& target);
-	void UpdateText();
 
 private:
 	Vector2u window_resolution_;
-
+	UI ui_;
 	Room room_;
     View view_;
 	VideoMode video_mode_;
@@ -40,14 +36,10 @@ private:
 	Texture room_texture_;
 	Sprite room_sprite_;
 
-	sf::Font font;
-
-	sf::Text uiText;
-
 	void InitVariables();
 	void InitWindow();
-	void InitFonts();
-	void InitTexts();
+
+
 	void InitRoom();
 	void InitPlayer();
 	void InitTester();

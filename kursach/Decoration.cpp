@@ -2,7 +2,7 @@
 Decoration::Decoration(Vector2f position)
 {
     set_position(position);
-    set_render_layer(2);
+    set_render_layer(3);
     InitVariables();
     InitVisuals();
     InitCollider();

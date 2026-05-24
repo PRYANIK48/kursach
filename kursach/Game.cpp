@@ -13,11 +13,6 @@ void Game::InitWindow() {
     video_mode_.height = view_.getSize().y;
     window_.create(video_mode_, "GameName", Style::Titlebar | Style::Close);
     window_.setVerticalSyncEnabled(true);
-
-    room_texture_.loadFromFile("Textures/room.png");
-    room_sprite_.setTexture(room_texture_);
-    room_sprite_.setScale(0.5, 0.5);
-    room_sprite_.setOrigin(room_sprite_.getLocalBounds().width / 2, room_sprite_.getLocalBounds().height / 2);
 }
 void Game::InitFonts()
 {
@@ -36,7 +31,7 @@ void Game::InitTexts()
 void Game::InitRoom()
 {
     RoomTemplates::InitTemplates();
-    room_.GenerateRoom(Vector2f(0.f, 0.f), 0);
+    room_.GenerateRoom(player_, Vector2f(0.f, 0.f), 0);
 }
 
 void Game::InitPlayer() {
@@ -56,8 +51,8 @@ Game::Game() {
     InitWindow();
     InitFonts();
     InitTexts();
-    InitRoom();
     InitPlayer();
+    InitRoom();
     InitTester();
 }
 const bool Game::getWindowIsOpen() const {
@@ -80,9 +75,10 @@ void Game::PollEvents() {
     }
 }
 void Game::Update(float time) {
-    this->PollEvents();
-    this->UpdateText();
+    PollEvents();
+    UpdateText();
     EntityInteractionSystem::UpdateEntities(time);
+    room_.CheckEnemies();
 }
 void Game::RenderText(sf::RenderTarget& target)
 {

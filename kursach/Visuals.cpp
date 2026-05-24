@@ -1,7 +1,7 @@
 #include "Visuals.h"
 #include <iostream>
 void Visuals::InitVariables() {
-    this->sheet_.loadFromFile("Textures/player.png");
+    this->sheet_.loadFromFile("Textures/test.png");
     this->sprite_.setTexture(sheet_);
     this->sprite_.setTextureRect(IntRect(0, 0, frame_w_, frame_h_));
     this->sprite_.setOrigin(frame_w_ / 2, frame_h_ / 2);

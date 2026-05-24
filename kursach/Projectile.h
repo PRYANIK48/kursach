@@ -24,6 +24,7 @@ private:
     void updatePosition(float time) override;
     void updateVisuals(float time) override;
 
+    void onDeath() override;
     void onCollision(Entity* entity);
     void InitVariables() override;
     void InitVisuals() override;

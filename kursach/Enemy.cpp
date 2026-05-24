@@ -41,15 +41,26 @@ void Enemy::InitCollider()
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
 void Enemy::Update(float time) {
-    updateAI(time);
+    if (!IsDead())
+    {
+        updateAI(time);
+    }
+    else
+    {
+        set_position(Vector2f(10000,10000));
+    }
     Entity::Update(time);
     set_shootCooldown(get_shootCooldown() - time);
 }
 void Enemy::Render(RenderTarget* target) {
-    get_visuals().Render(target);
-    if (DebugSettings::collidersVisuals)
+    if (!IsDead())
     {
-        target->draw(get_collider());
+
+        get_visuals().Render(target);
+        if (DebugSettings::collidersVisuals)
+        {
+            target->draw(get_collider());
+        }
     }
 }
 
@@ -132,7 +143,7 @@ void Enemy::updateAI(float time)
         {
             target_in_area = false;
         }
-        if (target_in_area && (std::fmodf(angle_to_target,90.f) < 5.f))
+        if (target_in_area && (std::fmodf(angle_to_target, 90.f) < 5.f))
         {
             set_move_direction(Vector2f());
         }
@@ -195,14 +206,17 @@ void Enemy::updateProjectileTemplate()
 
 void Enemy::onCollision(Entity* entity)
 {
-    if (auto* player = dynamic_cast<Player*>(entity)) {
-        PushOut(entity, 0.05f);
-        if (!player->InIframe())
-        {
-            player->TryApplyDamage(get_damage());
+    if (!IsDead())
+    {
+        if (auto* player = dynamic_cast<Player*>(entity)) {
+            PushOut(entity, 0.05f);
+            if (!player->InIframe())
+            {
+                player->TryApplyDamage(get_damage());
+            }
         }
-    }
-    else if (dynamic_cast<Entity*>(entity)) {
+        else if (dynamic_cast<Entity*>(entity)) {
+        }
     }
 }
 

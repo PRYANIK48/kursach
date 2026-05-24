@@ -13,6 +13,7 @@ struct DoorData
 {
     Vector2f position;
     Vector2f direction;
+    bool isEntrance;
 };
 
 struct PitData
@@ -30,6 +31,11 @@ struct StoneData
     Vector2f position;
 };
 
+struct EnemyData
+{
+    Vector2f position;
+};
+
 struct RoomTemplate
 {
     std::vector<WallData> walls;
@@ -37,4 +43,5 @@ struct RoomTemplate
     std::vector<PitData> pits;
     std::vector<DecorationData> decorations;
     std::vector<StoneData> stones;
+    std::vector<EnemyData> enemies;
 };

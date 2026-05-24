@@ -123,6 +123,11 @@ void Projectile::updateVisuals(float time)
     get_visuals().UpdateSprite();
 }
 
+void Projectile::onDeath()
+{
+    set_ready_to_delete();
+}
+
 void Projectile::onCollision(Entity* entity)
 {
     if (entity == get_owner()) {

@@ -100,5 +100,4 @@ void Entity::updateVisuals(float time)
 
 void Entity::onDeath()
 {
-    set_ready_to_delete();
 }

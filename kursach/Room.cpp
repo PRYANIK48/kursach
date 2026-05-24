@@ -1,5 +1,6 @@
 #include "Room.h"
 #include "Stone.h"
+#include "Player.h"
 
 Room::Room(Vector2f position)
 {
@@ -19,7 +20,7 @@ Room::~Room()
 void Room::Render(RenderTarget* target) {
     floor_visuals_.Render(target);
 }
-void Room::GenerateRoom(Vector2f position, int index)
+void Room::GenerateRoom(Player* player, Vector2f position, int index)
 {
     ClearRoom();
     set_position(position);
@@ -30,6 +31,7 @@ void Room::GenerateRoom(Vector2f position, int index)
     }
     current_template_ = &RoomTemplates::GetRoom(index);
 
+    floor_visuals_.SetPosition(position);
     for (const auto& wallData : current_template_->walls)
     {
         Wall* wall = new Wall(position + wallData.position, wallData.size);
@@ -40,6 +42,7 @@ void Room::GenerateRoom(Vector2f position, int index)
     for (const auto& doorData : current_template_->doors)
     {
         Door* door = new Door(position + doorData.position, doorData.direction);
+        door->set_entrance(doorData.isEntrance);
         doors_.push_back(door);
         EntityInteractionSystem::AddEntity(door);
     }
@@ -64,28 +67,71 @@ void Room::GenerateRoom(Vector2f position, int index)
         stones_.push_back(stone);
         EntityInteractionSystem::AddEntity(stone);
     }
+
+    for (const auto& stoneData : current_template_->stones)
+    {
+        Stone* stone = new Stone(position + stoneData.position);
+        stones_.push_back(stone);
+        EntityInteractionSystem::AddEntity(stone);
+    }
+
+    for (const auto& enemyData : current_template_->enemies)
+    {
+        Enemy* enemy = new Enemy(position + enemyData.position, player);
+        enemies_.push_back(enemy);
+        EntityInteractionSystem::AddEntity(enemy);
+    }
+}
+void Room::CheckEnemies()
+{
+    bool roomIsEmpty = true;
+    for (int i = 0; i < enemies_.size(); ++i)
+    {
+        if (!enemies_[i]->IsDead())
+        {
+            roomIsEmpty = false;
+            break;
+        }
+    }
+    if (roomIsEmpty && !IsCompleted())
+    {
+        std::cout << "incheck" << std::endl;
+        set_completed(true);
+        for (int i = 0; i < doors_.size(); ++i)
+        {
+            if (doors_[i]->IsEntrance())
+            {
+                doors_[i]->try_open(true);
+            }
+        }
+    }
 }
 void Room::ClearRoom()
 {
     for (int i = 0; i < walls_.size(); ++i)
     {
-        walls_[i]->set_dead();
+        walls_[i]->set_ready_to_delete();
     }
     walls_.clear();
     for (int i = 0; i < doors_.size(); ++i)
     {
-        doors_[i]->set_dead();
+        doors_[i]->set_ready_to_delete();
     }
     for (int i = 0; i < pits_.size(); ++i)
     {
-        pits_[i]->set_dead();
+        pits_[i]->set_ready_to_delete();
     }
     pits_.clear();
     for (int i = 0; i < decorations_.size(); ++i)
     {
-        decorations_[i]->set_dead();
+        decorations_[i]->set_ready_to_delete();
     }
     decorations_.clear();
+    for (int i = 0; i < enemies_.size(); ++i)
+    {
+        enemies_[i]->set_ready_to_delete();
+    }
+    enemies_.clear();
 }
 void Room::InitVisuals()
 {

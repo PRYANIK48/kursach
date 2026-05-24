@@ -1,6 +1,6 @@
 #pragma once
-#include "Wall.h"
-class Door : public Wall
+#include "Entity.h"
+class Door : public Entity
 {
 public:
     Door(Vector2f position, Vector2f facing);

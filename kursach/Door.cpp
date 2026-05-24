@@ -46,8 +46,8 @@ void Door::InitCollider()
     get_collider().setFillColor(Color(100, 200, 100, 80));
     get_collider().setOutlineColor(Color(50, 255, 50, 200));
     get_collider().setOutlineThickness(-2.f);
-    get_collider().setSize(get_collider_size());
-    get_collider().setOrigin(get_collider_size().x / 2, get_collider_size().y / 2);
+    get_collider().setSize(Vector2f(100,100));
+    get_collider().setOrigin(get_collider().getSize().x / 2, get_collider().getSize().y / 2);
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
 void Door::Update(float time)
@@ -103,22 +103,10 @@ void Door::onPlayerEntered()
 }
 void Door::onCollision(Entity* entity)
 {
-    if (auto* wall = dynamic_cast<Wall*>(entity)) {
-    }
-    else if (auto* player = dynamic_cast<Player*>(entity)) {
+    if (auto* player = dynamic_cast<Player*>(entity)) {
         if (IsOpen())
         {
             onPlayerEntered();
         }
-        else
-        {
-            PushOut(entity);
-            entity->OnWallCollision(this);
-        }
-    }
-    else if (dynamic_cast<Entity*>(entity))
-    {
-        PushOut(entity);
-        entity->OnWallCollision(this);
     }
 }

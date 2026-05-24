@@ -1,6 +1,7 @@
 #pragma once
 #include "Wall.h"
 #include "Projectile.h"
+#include "Door.h"
 Wall::Wall(Vector2f position, Vector2f colliderSize) {
     set_position(position);
     set_collider_size(colliderSize);
@@ -47,6 +48,9 @@ void Wall::updateVisuals(float time) {
 void Wall::onCollision(Entity* entity)
 {
     if (auto* wall = dynamic_cast<Wall*>(entity)) {
+    }
+    else if (auto* door = dynamic_cast<Door*>(entity))
+    {
     }
     else if (dynamic_cast<Entity*>(entity))
     {

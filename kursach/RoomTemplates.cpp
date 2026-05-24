@@ -19,14 +19,19 @@ void RoomTemplates::InitTemplates()
     wall.size = Vector2f(700.f, 80.f);
     room.walls.push_back(wall);
 
-    room.doors.push_back({
-        {-320.f, 0.f},
-        {1.f, 0.f}
-        });
-    room.doors.push_back({
-        {320.f, 0.f},
-        {-1.f, 0.f}
-        });
+    DoorData door;
+    door.position = Vector2f(-320.f, 0.f);
+    door.direction = Vector2f(1.f, 0.f);
+    room.doors.push_back(door);
+    door.position = Vector2f(320.f, 0.f);
+    door.direction = Vector2f(-1.f, 0.f);
+    room.doors.push_back(door);
+    door.position = Vector2f(0.f, 195.f);
+    door.direction = Vector2f(0.f, -1.f);
+    room.doors.push_back(door);
+    door.position = Vector2f(0.f, -195.f);
+    door.direction = Vector2f(0.f, 1.f);
+    room.doors.push_back(door);
 
     rooms_.push_back(room);
 }

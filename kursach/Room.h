@@ -28,7 +28,6 @@ private:
 
     std::vector<Wall*> walls_;
     std::vector<Door*> doors_;
-    std::vector<Enemy*> enemies_;
 
     const RoomTemplate* current_template_ = nullptr;
 

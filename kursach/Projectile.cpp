@@ -11,12 +11,14 @@ Projectile::Projectile(Vector2f position, Vector2f direction, Entity* owner) {
     InitCollider();
 }
 Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position, Entity* owner) {
+    set_position(position);
     set_owner(owner);
     set_visuals(ref.get_visuals());
+    get_visuals().SetPosition(position);
+    get_visuals().UpdateSprite();
     set_damage(ref.get_damage());
     set_friction(ref.get_friction());
     set_move_speed(ref.get_move_speed());
-    set_position(position);
     set_life_time(ref.get_life_time());
     set_collider(ref.get_collider());
     get_collider().setPosition(position);

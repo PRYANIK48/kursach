@@ -3,11 +3,14 @@
 Room::Room(Vector2f position)
 {
     set_position(position);
+    set_room_number(0);
     InitVisuals();
 }
 
 Room::~Room()
 {
+    walls_.clear();
+    doors_.clear();
 }
 
 void Room::Render(RenderTarget* target) {
@@ -18,6 +21,7 @@ void Room::GenerateRoom(Vector2f position, int index)
 {
     ClearRoom();
     set_position(position);
+    set_room_number(get_room_number_() + 1);
     if (index < 0)
     {
         index = Random::Int(1, RoomTemplates::GetRoomCount());
@@ -40,15 +44,14 @@ void Room::GenerateRoom(Vector2f position, int index)
 }
 void Room::ClearRoom()
 {
-    for (Wall* wall : walls_)
+    for (int i = 0; i < walls_.size(); ++i)
     {
-        wall->set_dead();
+        walls_[i]->set_dead();
     }
     walls_.clear();
-
-    for (Door* door : doors_)
+    for (int i = 0; i < doors_.size(); ++i)
     {
-        door->set_dead();
+        doors_[i]->set_dead();
     }
     doors_.clear();
 }

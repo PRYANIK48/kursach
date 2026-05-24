@@ -21,7 +21,10 @@ public:
 
     Vector2f get_position() const { return position_; };
     void set_position(Vector2f position) { position_ = position; };
+    int get_room_number_() const { return room_number_; };
+    void set_room_number(int number) { room_number_ = number; };
 private:
+    int room_number_;
     Vector2f position_;
     Visuals floor_visuals_;
     Visuals walls_visuals_;

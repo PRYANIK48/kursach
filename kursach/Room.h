@@ -8,6 +8,9 @@
 #include "Visuals.h"
 #include "Wall.h"
 #include "Door.h"
+#include "Pit.h"
+#include "Decoration.h"
+#include "Stone.h"
 using namespace sf;
 class Room
 {
@@ -27,10 +30,12 @@ private:
     int room_number_;
     Vector2f position_;
     Visuals floor_visuals_;
-    Visuals walls_visuals_;
 
     std::vector<Wall*> walls_;
     std::vector<Door*> doors_;
+    std::vector<Pit*> pits_;
+    std::vector<Decoration*> decorations_;
+    std::vector<Stone*> stones_;
 
     const RoomTemplate* current_template_ = nullptr;
 

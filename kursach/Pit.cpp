@@ -1,24 +1,23 @@
-#include "Door.h"
-#include "Player.h"
 #include "Pit.h"
-Door::Door(Vector2f position, Vector2f facing)
+#include "Player.h"
+#include "Wall.h"
+#include "Door.h"
+#include "Decoration.h"
+#include "Stone.h"
+Pit::Pit(Vector2f position)
 {
     set_position(position);
-    set_render_layer(4);
-    set_facing_direction(facing);
-    set_open(true);
-    try_open(false);
+    set_render_layer(2);
     InitVariables();
     InitVisuals();
     InitCollider();
 }
-void Door::InitVariables() {
-    set_open(false);
+void Pit::InitVariables() {
 }
-void Door::InitVisuals()
+void Pit::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/door.png");
+    get_visuals().get_sheet().loadFromFile("Textures/pit.png");
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(200);
     get_visuals().set_frame_h(200);
@@ -43,64 +42,44 @@ void Door::InitVisuals()
     get_visuals().set_anim_length(6);
     get_visuals().UpdateSprite();
 }
-void Door::InitCollider()
+void Pit::InitCollider()
 {
     get_collider().setFillColor(Color(100, 200, 100, 80));
     get_collider().setOutlineColor(Color(50, 255, 50, 200));
     get_collider().setOutlineThickness(-2.f);
-    get_collider().setSize(Vector2f(100,100));
+    get_collider().setSize(Vector2f(160 * get_visuals().get_sprite().getScale().x, 160 * get_visuals().get_sprite().getScale().y));
     get_collider().setOrigin(get_collider().getSize().x / 2, get_collider().getSize().y / 2);
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
-void Door::Update(float time)
+void Pit::Update(float time)
 {
     updateVisuals(time);
 }
-void Door::try_open(bool state)
+void Pit::updateVisuals(float time)
 {
-    if (IsOpen() == state)
-    {
-    }
-    else if (state)
-    {
-        set_open(state);
-        set_opening_direction(-1);
-        onOpen();
-    }
-    else
-    {
-        set_open(state);
-        set_opening_direction(1);
-        onClose();
-    }
-}
-void Door::updateVisuals(float time)
-{
-    if (get_opening_direction() != 0)
-    {
-        get_visuals().set_anim_frame(get_visuals().get_anim_frame() + get_opening_direction() * 0.02f * time);
-        if ((get_visuals().get_anim_frame() < 0) || (get_visuals().get_anim_frame() > get_visuals().get_anim_length())) {
-            set_opening_direction(0);
-        }
-    }
     get_visuals().UpdateSprite();
 }
-void Door::onOpen()
+void Pit::onCollision(Entity* entity)
 {
-    //звучёк
-}
-void Door::onClose()
-{
-}
-void Door::onPlayerEntered()
-{
-}
-void Door::onCollision(Entity* entity)
-{
-    if (auto* player = dynamic_cast<Player*>(entity)) {
-        if (IsOpen())
-        {
-            onPlayerEntered();
-        }
+    if (auto* wall = dynamic_cast<Wall*>(entity)) {
+    }
+    else if (auto* door = dynamic_cast<Door*>(entity))
+    {
+    }
+    else if (auto* pit = dynamic_cast<Pit*>(entity))
+    {
+    }
+    else if (auto* decoration = dynamic_cast<Decoration*>(entity))
+    {
+    }
+    else if (auto* stone = dynamic_cast<Stone*>(entity))
+    {
+    }
+    else if (auto* projectile = dynamic_cast<Projectile*>(entity))
+    {
+    }
+    else if (dynamic_cast<Entity*>(entity))
+    {
+        PushOut(entity);
     }
 }

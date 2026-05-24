@@ -4,6 +4,7 @@
 
 Player::Player(Vector2f position) {
     set_position(position);
+    set_render_layer(5);
     InitVariables();
     InitVisuals();
     InitCollider();

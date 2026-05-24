@@ -33,6 +33,18 @@ void RoomTemplates::InitTemplates()
     door.direction = Vector2f(0.f, 1.f);
     room.doors.push_back(door);
 
+    PitData pit;
+    pit.position = Vector2f(-100.f, 0.f);
+    room.pits.push_back(pit);
+
+    DecorationData decoration;
+    decoration.position = Vector2f(0.f, 0.f);
+    room.decorations.push_back(decoration);
+
+    StoneData stone;
+    stone.position = Vector2f(0.f, 100.f);
+    room.stones.push_back(stone);
+
     rooms_.push_back(room);
 }
 

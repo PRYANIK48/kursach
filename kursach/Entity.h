@@ -12,7 +12,7 @@ public:
     Entity(Vector2f position = Vector2f(0.f, 0.f)) { position_ = position; };
 
     virtual void Update(float time) = 0;
-    virtual void Render(RenderTarget* target) = 0;
+    virtual void Render(RenderTarget* target);
     virtual void CheckCollision(Entity* entity);
     virtual void ApplyDamage(float damage);
     virtual void OnWallCollision(Entity* entity) {};
@@ -34,6 +34,8 @@ public:
     void set_move_direction(Vector2f direction) { moveDirection_ = direction; }
     Vector2f get_facing_direction() const { return facingDirection_; };
     void set_facing_direction(Vector2f direction) { facingDirection_ = direction; }
+    int get_render_layer() const { return render_layer_; };
+    void set_render_layer(int layer) { render_layer_ = layer; }
     float get_friction() const { return friction_; };
     void set_friction(float friction) { friction_ = friction; }
     float get_move_speed() const { return move_speed_; };
@@ -50,13 +52,14 @@ public:
     void set_ready_to_delete() { ready_to_delete_ = true; };
 
 private:
-
     Visuals visuals_;
     RectangleShape collider_;
     Vector2f position_;
     Vector2f velocity_ = Vector2f();
     Vector2f moveDirection_ = Vector2f();
     Vector2f facingDirection_ = Vector2f(0.f,1.f);
+
+    int render_layer_ = 0;
 
     float friction_ = 0.5f;
     float move_speed_ = 0.f;

@@ -4,6 +4,14 @@ void Entity::Update(float time) {
     updateVisuals(time);
     set_move_direction(Vector2f(0.f, 0.f));
 }
+void Entity::Render(RenderTarget* target)
+{
+    get_visuals().Render(target);
+    if (DebugSettings::collidersVisuals)
+    {
+        target->draw(get_collider());
+    }
+}
 void Entity::CheckCollision(Entity* entity)
 {
     if (get_collider().getGlobalBounds().intersects(entity->get_collider().getGlobalBounds()))

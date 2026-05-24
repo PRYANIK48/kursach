@@ -2,8 +2,12 @@
 #include "Wall.h"
 #include "Projectile.h"
 #include "Door.h"
+#include "Pit.h"
+#include "Decoration.h"
+#include "Stone.h"
 Wall::Wall(Vector2f position, Vector2f colliderSize) {
     set_position(position);
+    set_render_layer(3);
     set_collider_size(colliderSize);
     InitVariables();
     InitVisuals();
@@ -50,6 +54,15 @@ void Wall::onCollision(Entity* entity)
     if (auto* wall = dynamic_cast<Wall*>(entity)) {
     }
     else if (auto* door = dynamic_cast<Door*>(entity))
+    {
+    }
+    else if (auto* pit = dynamic_cast<Pit*>(entity))
+    {
+    }
+    else if (auto* decoration = dynamic_cast<Decoration*>(entity))
+    {
+    }
+    else if (auto* stone = dynamic_cast<Stone*>(entity))
     {
     }
     else if (dynamic_cast<Entity*>(entity))

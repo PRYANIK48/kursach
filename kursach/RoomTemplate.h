@@ -1,5 +1,4 @@
 #pragma once
-
 #include <vector>
 #include <SFML/System/Vector2.hpp>
 using namespace sf;
@@ -16,8 +15,26 @@ struct DoorData
     Vector2f direction;
 };
 
+struct PitData
+{
+    Vector2f position;
+};
+
+struct DecorationData
+{
+    Vector2f position;
+};
+
+struct StoneData
+{
+    Vector2f position;
+};
+
 struct RoomTemplate
 {
     std::vector<WallData> walls;
     std::vector<DoorData> doors;
+    std::vector<PitData> pits;
+    std::vector<DecorationData> decorations;
+    std::vector<StoneData> stones;
 };

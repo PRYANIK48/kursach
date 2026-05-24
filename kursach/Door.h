@@ -6,7 +6,6 @@ public:
     Door(Vector2f position, Vector2f facing);
 
     void Update(float time) override;
-    void Render(RenderTarget* target) override;
 
     bool IsOpen() const { return is_open_; };
     void set_open(bool state) { is_open_ = state; };

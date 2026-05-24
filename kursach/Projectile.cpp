@@ -2,10 +2,12 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Wall.h"
+#include "Stone.h"
 Projectile::Projectile(Vector2f position, Vector2f direction, Entity* owner) {
     set_owner(owner);
     set_position(position);
     set_move_direction(direction);
+    set_render_layer(5);
     InitVariables();
     InitVisuals();
     InitCollider();
@@ -13,6 +15,7 @@ Projectile::Projectile(Vector2f position, Vector2f direction, Entity* owner) {
 Projectile::Projectile(const Projectile& ref, Vector2f direction, Vector2f position, Entity* owner) {
     set_position(position);
     set_owner(owner);
+    set_render_layer(ref.get_render_layer());
     set_visuals(ref.get_visuals());
     get_visuals().SetPosition(position);
     get_visuals().UpdateSprite();
@@ -125,30 +128,21 @@ void Projectile::onCollision(Entity* entity)
     if (entity == get_owner()) {
     }
     else if (auto* enemy = dynamic_cast<Enemy*>(entity)) {
-        if (!IsDead())
-        {
             enemy->AddImpulse(Vector2f(get_velocity().x / 2.f, get_velocity().y / 2.f));
             enemy->ApplyDamage(get_damage());
             set_dead();
-        }
     }
     else if (auto* wall = dynamic_cast<Wall*>(entity)) {
-        if (!IsDead())
-        {
             set_dead();
-        }
+    }
+    else if (auto* stone = dynamic_cast<Stone*>(entity)) {
+            set_dead();
     }
     else if (auto* player = dynamic_cast<Player*>(entity)) {
-        if (!IsDead())
-        {
             player->AddImpulse(Vector2f(get_velocity().x / 2.f, get_velocity().y / 2.f));
             player->ApplyDamage(get_damage());
             set_dead();
-        }
     }
     else if (dynamic_cast<Entity*>(entity)) {
-        if (!IsDead())
-        {
-        }
     }
 }

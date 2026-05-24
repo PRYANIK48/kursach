@@ -4,6 +4,7 @@
 Enemy::Enemy(Vector2f position, Entity* target) {
     set_position(position);
     set_target(target);
+    set_render_layer(5);
     InitVariables();
     InitVisuals();
     InitCollider();

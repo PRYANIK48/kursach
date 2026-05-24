@@ -12,7 +12,7 @@ void Decoration::InitVariables() {
 void Decoration::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/room1walls.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("room1walls"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(1400);
     get_visuals().set_frame_h(900);

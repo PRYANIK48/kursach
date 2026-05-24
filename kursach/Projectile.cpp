@@ -35,7 +35,7 @@ void Projectile::InitVariables() {
 void Projectile::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/ignatiy projectile.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("ignatiy projectile"));
     get_visuals().set_frame_w(79);
     get_visuals().set_frame_h(75);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
@@ -145,7 +145,7 @@ void Projectile::onCollision(Entity* entity)
     }
     else if (auto* player = dynamic_cast<Player*>(entity)) {
             player->AddImpulse(Vector2f(get_velocity().x / 2.f, get_velocity().y / 2.f));
-            player->ApplyDamage(get_damage());
+            player->TryApplyDamage(get_damage());
             set_dead();
     }
     else if (dynamic_cast<Entity*>(entity)) {

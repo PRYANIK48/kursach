@@ -2,6 +2,7 @@
 #include<ctime>
 #include <iostream>
 #include "EntityInteractionSystem.h"
+#include "Assets.h"
 #include "DebugSettings.h"
 #include "Player.h" 
 #include "Enemy.h"
@@ -33,17 +34,11 @@ private:
 	Event event_;
 	Player* player_;
 
-	Texture room_texture_;
-	Sprite room_sprite_;
-
 	void InitVariables();
+	void InitTextures();
 	void InitWindow();
-
 
 	void InitRoom();
 	void InitPlayer();
-	void InitTester();
-	std::vector<Wall*> walls_;
-	Enemy* enemy_;
 };
 

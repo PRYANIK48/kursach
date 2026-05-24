@@ -24,6 +24,9 @@ public:
     void GenerateRoom(Player* player, Vector2f position = Vector2f(), int index = -1);
     void CheckEnemies();
     void ClearRoom();
+    void InitRoom();
+
+    Door* GetEnteredDoor();
 
     bool IsCompleted() const { return is_completed_; };
     void set_completed(bool state) { is_completed_ = state; };

@@ -17,7 +17,7 @@ void Stone::InitVariables() {
 void Stone::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/rock.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("rock"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(120);
     get_visuals().set_frame_h(120);

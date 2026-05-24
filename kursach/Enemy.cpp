@@ -23,7 +23,7 @@ void Enemy::InitVariables() {
 void Enemy::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/lizard.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("lizard"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(140);
     get_visuals().set_frame_h(140);
@@ -198,7 +198,7 @@ void Enemy::updateVisuals(float time) {
 
 void Enemy::updateProjectileTemplate()
 {
-    projectileTemplate_.get_visuals().get_sheet().loadFromFile("Textures/lizard projectile.png");
+    projectileTemplate_.get_visuals().get_sprite().setTexture(Assets::GetTexture("lizard projectile"));
     projectileTemplate_.set_damage(get_damage());
     projectileTemplate_.set_move_speed(0.3f);
     projectileTemplate_.set_life_time(800.f);

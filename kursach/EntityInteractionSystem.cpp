@@ -55,7 +55,10 @@ void EntityInteractionSystem::RenderEntities(sf::RenderTarget* target)
 void EntityInteractionSystem::checkCollisions(Entity* entity)
 {
     for (auto it = entities.begin(); it != entities.end(); ) {
-        entity->CheckCollision(*it);
+        if (entity != *it)
+        {
+            entity->CheckCollision(*it);
+        }
         if ((*it)->IsReadyToDelete()) {
             break;
         }

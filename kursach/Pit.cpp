@@ -17,7 +17,7 @@ void Pit::InitVariables() {
 void Pit::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/pit.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("pit"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(200);
     get_visuals().set_frame_h(200);

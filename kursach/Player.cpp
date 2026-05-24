@@ -23,7 +23,7 @@ void Player::InitVariables() {
 void Player::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/player.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("player"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(140);
     get_visuals().set_frame_h(140);

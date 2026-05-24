@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "EntityInteractionSystem.h";
+#include "Assets.h";
 #include "DebugSettings.h"
 #include "GMath.h"
 #include "Visuals.h"

@@ -13,7 +13,7 @@ struct DoorData
 {
     Vector2f position;
     Vector2f direction;
-    bool isEntrance;
+    bool isLocked;
 };
 
 struct PitData

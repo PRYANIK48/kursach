@@ -5,6 +5,21 @@ bool DebugSettings::collidersVisuals = false;
 void Game::InitVariables() {
     player_ = nullptr;
 }
+void Game::InitTextures()
+{
+    Assets::LoadTexture("chainmal","Textures/chainmal.png");
+    Assets::LoadTexture("door","Textures/door.png");
+    Assets::LoadTexture("heart","Textures/heart.png");
+    Assets::LoadTexture("ignatiy projectile","Textures/ignatiy projectile.png");
+    Assets::LoadTexture("lizard projectile","Textures/lizard projectile.png");
+    Assets::LoadTexture("lizard","Textures/lizard.png");
+    Assets::LoadTexture("pit","Textures/pit.png");
+    Assets::LoadTexture("player","Textures/player.png");
+    Assets::LoadTexture("rock","Textures/rock.png");
+    Assets::LoadTexture("room1floor","Textures/room1floor.png");
+    Assets::LoadTexture("room1walls","Textures/room1walls.png");
+    Assets::LoadTexture("test","Textures/test.png");
+}
 void Game::InitWindow() {
     window_resolution_ = Vector2u(1280, 720);
     view_.setCenter(0, 0);
@@ -29,10 +44,9 @@ HUDData Game::GetHUDData() const
     return data;
 }
 
-
-
 void Game::InitRoom()
 {
+    room_.InitRoom();
     RoomTemplates::InitTemplates();
     room_.GenerateRoom(player_, Vector2f(0.f, 0.f), 0);
 }
@@ -43,18 +57,12 @@ void Game::InitPlayer() {
     EntityInteractionSystem::AddEntity(player_);
 }
 
-void Game::InitTester()
-{
-    enemy_ = new Enemy(Vector2f(200, 100), player_);
-    EntityInteractionSystem::AddEntity(enemy_);
-}
-
 Game::Game() {
     InitVariables();
     InitWindow();
+    InitTextures();
     InitPlayer();
     InitRoom();
-    InitTester();
     ui_.Init();
 }
 const bool Game::getWindowIsOpen() const {
@@ -78,16 +86,21 @@ void Game::PollEvents() {
 }
 void Game::Update(float time) {
     PollEvents();
-    ui_.Update(GetHUDData());
     EntityInteractionSystem::UpdateEntities(time);
     room_.CheckEnemies();
+    Door* enteredDoor = room_.GetEnteredDoor();
+    if (enteredDoor)
+    {
+        enteredDoor->set_entered(false);
+        room_.GenerateRoom(player_,room_.get_position() + ((enteredDoor->get_position() - room_.get_position()) * 2.f) + enteredDoor->get_facing_direction() * 100.f);
+        view_.setCenter(room_.get_position());
+    }
+    ui_.Update(GetHUDData());
 }
 
 void Game::Render() {
-    //view_.move(2, 2);
     window_.setView(view_);
     window_.clear(Color(0, 0, 0));
-    //window_.draw(room_sprite_);
     room_.Render(&window_);
     EntityInteractionSystem::RenderEntities(&window_);
     ui_.Render(window_);

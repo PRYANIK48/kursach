@@ -4,7 +4,6 @@ std::vector<RoomTemplate> RoomTemplates::rooms_;
 
 void RoomTemplates::InitTemplates()
 {
-    RoomTemplate room;
     WallData wall;
     DoorData door;
     PitData pit;
@@ -12,7 +11,8 @@ void RoomTemplates::InitTemplates()
     StoneData stone;
     EnemyData enemy;
 
-    //room1
+    //room0
+    RoomTemplate room;
     wall.position = Vector2f(-330.f, 0.f);
     wall.size = Vector2f(80.f, 400.f);
     room.walls.push_back(wall);
@@ -29,19 +29,19 @@ void RoomTemplates::InitTemplates()
 
     door.position = Vector2f(-320.f, 0.f);
     door.direction = Vector2f(1.f, 0.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
     door.position = Vector2f(320.f, 0.f);
     door.direction = Vector2f(-1.f, 0.f);
-    door.isEntrance = true;
+    door.isLocked = true;
     room.doors.push_back(door);
     door.position = Vector2f(0.f, 195.f);
     door.direction = Vector2f(0.f, -1.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
     door.position = Vector2f(0.f, -195.f);
     door.direction = Vector2f(0.f, 1.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
 
     stone.position = Vector2f(265.f, 140.f);
@@ -58,7 +58,8 @@ void RoomTemplates::InitTemplates()
 
     rooms_.push_back(room);
 
-    //room2
+    //room1
+    room = RoomTemplate();
     wall.position = Vector2f(-330.f, 0.f);
     wall.size = Vector2f(80.f, 400.f);
     room.walls.push_back(wall);
@@ -74,11 +75,11 @@ void RoomTemplates::InitTemplates()
 
     door.position = Vector2f(-320.f, 0.f);
     door.direction = Vector2f(1.f, 0.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
     door.position = Vector2f(320.f, 0.f);
     door.direction = Vector2f(-1.f, 0.f);
-    door.isEntrance = true;
+    door.isLocked = true;
     room.doors.push_back(door);
 
     pit.position = Vector2f(-220.f, 100.f);
@@ -98,7 +99,8 @@ void RoomTemplates::InitTemplates()
 
     rooms_.push_back(room);
 
-    //room3
+    //room2
+    room = RoomTemplate();
     wall.position = Vector2f(-330.f, 0.f);
     wall.size = Vector2f(80.f, 400.f);
     room.walls.push_back(wall);
@@ -114,11 +116,11 @@ void RoomTemplates::InitTemplates()
 
     door.position = Vector2f(-320.f, 0.f);
     door.direction = Vector2f(1.f, 0.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
     door.position = Vector2f(320.f, 0.f);
     door.direction = Vector2f(-1.f, 0.f);
-    door.isEntrance = true;
+    door.isLocked = true;
     room.doors.push_back(door);
 
     stone.position = Vector2f(0.f, 100.f);
@@ -138,7 +140,8 @@ void RoomTemplates::InitTemplates()
 
     rooms_.push_back(room);
 
-    //room4
+    //room3
+    room = RoomTemplate();
     wall.position = Vector2f(-330.f, 0.f);
     wall.size = Vector2f(80.f, 400.f);
     room.walls.push_back(wall);
@@ -154,11 +157,11 @@ void RoomTemplates::InitTemplates()
 
     door.position = Vector2f(-320.f, 0.f);
     door.direction = Vector2f(1.f, 0.f);
-    door.isEntrance = false;
+    door.isLocked = false;
     room.doors.push_back(door);
     door.position = Vector2f(320.f, 0.f);
     door.direction = Vector2f(-1.f, 0.f);
-    door.isEntrance = true;
+    door.isLocked = true;
     room.doors.push_back(door);
 
     pit.position = Vector2f(160.f, -120.f);
@@ -167,7 +170,6 @@ void RoomTemplates::InitTemplates()
     room.pits.push_back(pit);
     pit.position = Vector2f(160.f, 120.f);
     room.pits.push_back(pit);
-
 
     enemy.position = Vector2f(200.f, 0.f);
     room.enemies.push_back(enemy);

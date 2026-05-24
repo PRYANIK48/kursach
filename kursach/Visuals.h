@@ -15,7 +15,6 @@ public:
     void Render(RenderTarget* target) { 
         target->draw(sprite_);
     };
-    Texture& get_sheet() { return sheet_; };
     Sprite& get_sprite() { return sprite_; };
     Vector2f get_visuals_position() const { return visuals_position_; };
     void set_visuals_position(Vector2f position) { visuals_position_ = position; };
@@ -34,7 +33,6 @@ public:
     Visuals& operator=(const Visuals& ref);
 
 private:
-    Texture sheet_;
     Sprite sprite_;
     Vector2f visuals_position_;
     float anim_frame_ = 0.f;

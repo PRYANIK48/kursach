@@ -6,8 +6,11 @@ Door::Door(Vector2f position, Vector2f facing)
     set_position(position);
     set_render_layer(4);
     set_facing_direction(facing);
+    set_opening_direction(0);
     set_open(true);
     try_open(false);
+    set_locked(true);
+    set_entered(false);
     InitVariables();
     InitVisuals();
     InitCollider();
@@ -18,7 +21,7 @@ void Door::InitVariables() {
 void Door::InitVisuals()
 {
     get_visuals().SetPosition(get_position());
-    get_visuals().get_sheet().loadFromFile("Textures/door.png");
+    get_visuals().get_sprite().setTexture(Assets::GetTexture("door"));
     get_visuals().get_sprite().setScale(Vector2f(0.5f, 0.5f));
     get_visuals().set_frame_w(200);
     get_visuals().set_frame_h(200);
@@ -87,13 +90,13 @@ void Door::updateVisuals(float time)
 }
 void Door::onOpen()
 {
-    //звучёк
 }
 void Door::onClose()
 {
 }
 void Door::onPlayerEntered()
 {
+    set_entered(true);
 }
 void Door::onCollision(Entity* entity)
 {

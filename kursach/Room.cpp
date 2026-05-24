@@ -1,12 +1,11 @@
 #include "Room.h"
 #include "Stone.h"
 #include "Player.h"
+#include "Assets.h"
 
 Room::Room(Vector2f position)
 {
     set_position(position);
-    set_room_number(0);
-    InitVisuals();
 }
 
 Room::~Room()
@@ -24,10 +23,11 @@ void Room::GenerateRoom(Player* player, Vector2f position, int index)
 {
     ClearRoom();
     set_position(position);
+    set_completed(false);
     set_room_number(get_room_number_() + 1);
     if (index < 0)
     {
-        index = Random::Int(1, RoomTemplates::GetRoomCount());
+        index = Random::Int(1, RoomTemplates::GetRoomCount()-1);
     }
     current_template_ = &RoomTemplates::GetRoom(index);
 
@@ -42,7 +42,7 @@ void Room::GenerateRoom(Player* player, Vector2f position, int index)
     for (const auto& doorData : current_template_->doors)
     {
         Door* door = new Door(position + doorData.position, doorData.direction);
-        door->set_entrance(doorData.isEntrance);
+        door->set_locked(doorData.isLocked);
         doors_.push_back(door);
         EntityInteractionSystem::AddEntity(door);
     }
@@ -59,13 +59,6 @@ void Room::GenerateRoom(Player* player, Vector2f position, int index)
         Decoration* decoration = new Decoration(position + decorationData.position);
         decorations_.push_back(decoration);
         EntityInteractionSystem::AddEntity(decoration);
-    }
-
-    for (const auto& stoneData : current_template_->stones)
-    {
-        Stone* stone = new Stone(position + stoneData.position);
-        stones_.push_back(stone);
-        EntityInteractionSystem::AddEntity(stone);
     }
 
     for (const auto& stoneData : current_template_->stones)
@@ -95,17 +88,17 @@ void Room::CheckEnemies()
     }
     if (roomIsEmpty && !IsCompleted())
     {
-        std::cout << "incheck" << std::endl;
         set_completed(true);
         for (int i = 0; i < doors_.size(); ++i)
         {
-            if (doors_[i]->IsEntrance())
+            if (doors_[i]->IsLocked())
             {
                 doors_[i]->try_open(true);
             }
         }
     }
 }
+
 void Room::ClearRoom()
 {
     for (int i = 0; i < walls_.size(); ++i)
@@ -117,6 +110,7 @@ void Room::ClearRoom()
     {
         doors_[i]->set_ready_to_delete();
     }
+    doors_.clear();
     for (int i = 0; i < pits_.size(); ++i)
     {
         pits_[i]->set_ready_to_delete();
@@ -127,15 +121,37 @@ void Room::ClearRoom()
         decorations_[i]->set_ready_to_delete();
     }
     decorations_.clear();
+    for (int i = 0; i < stones_.size(); ++i)
+    {
+        stones_[i]->set_ready_to_delete();
+    }
+    stones_.clear();
     for (int i = 0; i < enemies_.size(); ++i)
     {
         enemies_[i]->set_ready_to_delete();
     }
     enemies_.clear();
 }
+void Room::InitRoom()
+{
+    set_room_number(0);
+    InitVisuals();
+}
+Door* Room::GetEnteredDoor()
+{
+    for (int i = 0; i < doors_.size(); ++i)
+    {
+        if (doors_[i]->IsEntered())
+        {
+            return doors_[i];
+        }
+    }
+
+    return nullptr;
+}
 void Room::InitVisuals()
 {
-    floor_visuals_.get_sheet().loadFromFile("Textures/room1floor.png");
+    floor_visuals_.get_sprite().setTexture(Assets::GetTexture("room1floor"));
     floor_visuals_.get_sprite().setScale(Vector2f(0.5f, 0.5f));
     floor_visuals_.set_frame_w(1400);
     floor_visuals_.set_frame_h(900);

@@ -35,10 +35,15 @@ public:
 
     void Render(sf::RenderWindow& window);
 
+    void set_deathScreen(bool state) { deathScreen_ = state; }
+
 private:
     sf::Font font;
-
     sf::Text uiText;
+
+    sf::Font deathScreenFont;
+    sf::Text deathScreenText;
+    bool deathScreen_ = false;
 
     int hp_ = 0;
     int damage_ = 0;

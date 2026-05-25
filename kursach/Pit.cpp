@@ -22,24 +22,7 @@ void Pit::InitVisuals()
     get_visuals().set_frame_w(200);
     get_visuals().set_frame_h(200);
     get_visuals().get_sprite().setOrigin(get_visuals().get_frame_w() / 2, get_visuals().get_frame_h() / 2);
-
-    if (abs(get_facing_direction().y) > abs(get_facing_direction().x)) {
-        if (get_facing_direction().y <= 0) {
-            get_visuals().set_anim_sheet_row(2);
-        }
-        else {
-            get_visuals().set_anim_sheet_row(0);
-        }
-    }
-    else {
-        if (get_facing_direction().x >= 0) {
-            get_visuals().set_anim_sheet_row(1);
-        }
-        else {
-            get_visuals().set_anim_sheet_row(3);
-        }
-    }
-    get_visuals().set_anim_length(6);
+    get_visuals().set_anim_length(1);
     get_visuals().UpdateSprite();
 }
 void Pit::InitCollider()

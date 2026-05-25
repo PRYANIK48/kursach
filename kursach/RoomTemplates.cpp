@@ -10,6 +10,7 @@ void RoomTemplates::InitTemplates()
     DecorationData decoration;
     StoneData stone;
     EnemyData enemy;
+    PickupData pickup;
 
     //room0
     RoomTemplate room;
@@ -56,6 +57,10 @@ void RoomTemplates::InitTemplates()
     decoration.position = Vector2f(0.f, 0.f);
     room.decorations.push_back(decoration);
 
+    pickup.position = Vector2f(-100.f,0.f);
+    pickup.type = 1;
+    room.pickups.push_back(pickup);
+
     rooms_.push_back(room);
 
     //room1
@@ -96,6 +101,10 @@ void RoomTemplates::InitTemplates()
 
     decoration.position = Vector2f(0.f, 0.f);
     room.decorations.push_back(decoration);
+
+    pickup.position = Vector2f(0.f, 0.f);
+    pickup.type = 1;
+    room.pickups.push_back(pickup);
 
     rooms_.push_back(room);
 

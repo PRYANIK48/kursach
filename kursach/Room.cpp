@@ -10,10 +10,7 @@ Room::Room(Vector2f position)
 
 Room::~Room()
 {
-    walls_.clear();
-    doors_.clear();
-    pits_.clear();
-    decorations_.clear();
+    ClearRoom();
 }
 
 void Room::Render(RenderTarget* target) {
@@ -74,6 +71,13 @@ void Room::GenerateRoom(Player* player, Vector2f position, int index)
         enemies_.push_back(enemy);
         EntityInteractionSystem::AddEntity(enemy);
     }
+
+    for (const auto& pickupData : current_template_->pickups)
+    {
+        Pickup* pickup = new Pickup(position + pickupData.position, pickupData.type);
+        pickups_.push_back(pickup);
+        EntityInteractionSystem::AddEntity(pickup);
+    }
 }
 void Room::CheckEnemies()
 {
@@ -131,6 +135,11 @@ void Room::ClearRoom()
         enemies_[i]->set_ready_to_delete();
     }
     enemies_.clear();
+    for (int i = 0; i < pickups_.size(); ++i)
+    {
+        pickups_[i]->set_ready_to_delete();
+    }
+    pickups_.clear();
 }
 void Room::InitRoom()
 {

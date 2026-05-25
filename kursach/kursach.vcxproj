@@ -139,6 +139,7 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GMath.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Pickup.cpp" />
     <ClCompile Include="Pit.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Projectile.cpp" />
@@ -162,6 +163,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GMath.h" />
     <ClInclude Include="HUDData.h" />
+    <ClInclude Include="Pickup.h" />
     <ClInclude Include="Pit.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Projectile.h" />

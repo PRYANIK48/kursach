@@ -7,18 +7,18 @@ void Game::InitVariables() {
 }
 void Game::InitTextures()
 {
-    Assets::LoadTexture("chainmal","Textures/chainmal.png");
-    Assets::LoadTexture("door","Textures/door.png");
-    Assets::LoadTexture("heart","Textures/heart.png");
-    Assets::LoadTexture("ignatiy projectile","Textures/ignatiy projectile.png");
-    Assets::LoadTexture("lizard projectile","Textures/lizard projectile.png");
-    Assets::LoadTexture("lizard","Textures/lizard.png");
-    Assets::LoadTexture("pit","Textures/pit.png");
-    Assets::LoadTexture("player","Textures/player.png");
-    Assets::LoadTexture("rock","Textures/rock.png");
-    Assets::LoadTexture("room1floor","Textures/room1floor.png");
-    Assets::LoadTexture("room1walls","Textures/room1walls.png");
-    Assets::LoadTexture("test","Textures/test.png");
+    Assets::LoadTexture("chainmal", "Textures/chainmal.png");
+    Assets::LoadTexture("door", "Textures/door.png");
+    Assets::LoadTexture("heart", "Textures/heart.png");
+    Assets::LoadTexture("ignatiy projectile", "Textures/ignatiy projectile.png");
+    Assets::LoadTexture("lizard projectile", "Textures/lizard projectile.png");
+    Assets::LoadTexture("lizard", "Textures/lizard.png");
+    Assets::LoadTexture("pit", "Textures/pit.png");
+    Assets::LoadTexture("player", "Textures/player.png");
+    Assets::LoadTexture("rock", "Textures/rock.png");
+    Assets::LoadTexture("room1floor", "Textures/room1floor.png");
+    Assets::LoadTexture("room1walls", "Textures/room1walls.png");
+    Assets::LoadTexture("test", "Textures/test.png");
 }
 void Game::InitWindow() {
     window_resolution_ = Vector2u(1280, 720);
@@ -81,18 +81,30 @@ void Game::PollEvents() {
             if (event_.key.code == Keyboard::P) {
                 DebugSettings::toggleCollidersVisuals();
             }
+            if (event_.key.code == Keyboard::R) {
+                ui_.set_deathScreen(false);
+                player_->set_ready_to_delete();
+                room_.ClearRoom();
+                InitPlayer();
+                InitRoom();
+                view_.setCenter(room_.get_position());
+            }
         }
     }
 }
 void Game::Update(float time) {
     PollEvents();
     EntityInteractionSystem::UpdateEntities(time);
+    if (player_->IsDead())
+    {
+        ui_.set_deathScreen(true);
+    }
     room_.CheckEnemies();
     Door* enteredDoor = room_.GetEnteredDoor();
     if (enteredDoor)
     {
         enteredDoor->set_entered(false);
-        room_.GenerateRoom(player_,room_.get_position() + ((enteredDoor->get_position() - room_.get_position()) * 2.f) + enteredDoor->get_facing_direction() * 100.f);
+        room_.GenerateRoom(player_, room_.get_position() + ((enteredDoor->get_position() - room_.get_position()) * 2.f) + enteredDoor->get_facing_direction() * 100.f);
         view_.setCenter(room_.get_position());
     }
     ui_.Update(GetHUDData());

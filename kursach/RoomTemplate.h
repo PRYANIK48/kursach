@@ -36,6 +36,12 @@ struct EnemyData
     Vector2f position;
 };
 
+struct PickupData
+{
+    Vector2f position;
+    int type;
+};
+
 struct RoomTemplate
 {
     std::vector<WallData> walls;
@@ -44,4 +50,5 @@ struct RoomTemplate
     std::vector<DecorationData> decorations;
     std::vector<StoneData> stones;
     std::vector<EnemyData> enemies;
+    std::vector<PickupData> pickups;
 };

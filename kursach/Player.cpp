@@ -41,10 +41,13 @@ void Player::InitCollider()
     get_collider().setPosition(get_visuals().get_visuals_position());
 }
 void Player::Update(float time) {
-    updateInput(time);
+    if (!IsDead())
+    {
+        updateInput(time);
+        set_shootCooldown(get_shootCooldown() - time);
+        set_iframeCurrent(get_iframeCurrent() - time);
+    }
     Entity::Update(time);
-    set_shootCooldown(get_shootCooldown() - time);
-    set_iframeCurrent(get_iframeCurrent() - time);
 }
 
 void Player::Render(RenderTarget* target) {

@@ -64,7 +64,7 @@ void Entity::set_health(float health)
     health_ = health;
     if (health > maxHealth_)
     {
-        health = maxHealth_;
+        health_ = maxHealth_;
     }
     else if (health <= 0)
     {

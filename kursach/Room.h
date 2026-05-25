@@ -13,6 +13,7 @@
 #include "Stone.h"
 #include "Enemy.h"
 #include "Player.h"
+#include "Pickup.h"
 using namespace sf;
 class Room
 {
@@ -46,6 +47,7 @@ private:
     std::vector<Decoration*> decorations_;
     std::vector<Stone*> stones_;
     std::vector<Enemy*> enemies_;
+    std::vector<Pickup*> pickups_;
 
     const RoomTemplate* current_template_ = nullptr;
 

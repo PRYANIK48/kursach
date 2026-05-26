@@ -47,7 +47,7 @@ void Enemy::Update(float time) {
     }
     else
     {
-        set_position(Vector2f(10000,10000));
+        set_position(Vector2f(10000, 10000));
     }
     Entity::Update(time);
     set_shootCooldown(get_shootCooldown() - time);
@@ -81,79 +81,83 @@ void Enemy::shoot()
 
 void Enemy::updateAI(float time)
 {
-    float distance_to_target = GMath::Distance(get_position(), get_target()->get_position());
-    float angle_to_target = GMath::AngleBetweenPoints(get_position(), get_target()->get_position());
-    Vector2f direction_to_target = GMath::Direction(get_position(), get_target()->get_position());
-    if (distance_to_target > 200.f)
+    if (!(get_target()->IsDead() || get_target() == nullptr))
     {
-        set_move_direction(direction_to_target);
-    }
-    else
-    {
-        bool target_in_area = true;
-        if (330.f < angle_to_target || angle_to_target < 30.f)
+
+        float distance_to_target = GMath::Distance(get_position(), get_target()->get_position());
+        float angle_to_target = GMath::AngleBetweenPoints(get_position(), get_target()->get_position());
+        Vector2f direction_to_target = GMath::Direction(get_position(), get_target()->get_position());
+        if (distance_to_target > 200.f)
         {
-            set_facing_direction(Vector2f(0.f, -1.f));
-            if (angle_to_target < 90.f)
-            {
-                set_move_direction(Vector2f(1.f, 0.f));
-            }
-            else
-            {
-                set_move_direction(Vector2f(-1.f, 0.f));
-            }
-        }
-        else if (60.f < angle_to_target && angle_to_target < 120.f)
-        {
-            set_facing_direction(Vector2f(1.f, 0.f));
-            if (90.f < angle_to_target)
-            {
-                set_move_direction(Vector2f(0.f, 1.f));
-            }
-            else
-            {
-                set_move_direction(Vector2f(0.f, -1.f));
-            }
-        }
-        else if (150.f < angle_to_target && angle_to_target < 210.f)
-        {
-            set_facing_direction(Vector2f(0.f, 1.f));
-            if (180.f < angle_to_target)
-            {
-                set_move_direction(Vector2f(-1.f, 0.f));
-            }
-            else
-            {
-                set_move_direction(Vector2f(1.f, 0.f));
-            }
-        }
-        else if (230.f < angle_to_target && angle_to_target < 300.f)
-        {
-            set_facing_direction(Vector2f(-1.f, 0.f));
-            if (270.f < angle_to_target)
-            {
-                set_move_direction(Vector2f(0.f, -1.f));
-            }
-            else
-            {
-                set_move_direction(Vector2f(0.f, 1.f));
-            }
+            set_move_direction(direction_to_target);
         }
         else
         {
-            target_in_area = false;
-        }
-        if (target_in_area && (std::fmodf(angle_to_target, 90.f) < 5.f))
-        {
-            set_move_direction(Vector2f());
-        }
-        if (distance_to_target < 150.f)
-        {
-            set_move_direction(-direction_to_target);
-        }
-        if (target_in_area)
-        {
-            TryShoot();
+            bool target_in_area = true;
+            if (330.f < angle_to_target || angle_to_target < 30.f)
+            {
+                set_facing_direction(Vector2f(0.f, -1.f));
+                if (angle_to_target < 90.f)
+                {
+                    set_move_direction(Vector2f(1.f, 0.f));
+                }
+                else
+                {
+                    set_move_direction(Vector2f(-1.f, 0.f));
+                }
+            }
+            else if (60.f < angle_to_target && angle_to_target < 120.f)
+            {
+                set_facing_direction(Vector2f(1.f, 0.f));
+                if (90.f < angle_to_target)
+                {
+                    set_move_direction(Vector2f(0.f, 1.f));
+                }
+                else
+                {
+                    set_move_direction(Vector2f(0.f, -1.f));
+                }
+            }
+            else if (150.f < angle_to_target && angle_to_target < 210.f)
+            {
+                set_facing_direction(Vector2f(0.f, 1.f));
+                if (180.f < angle_to_target)
+                {
+                    set_move_direction(Vector2f(-1.f, 0.f));
+                }
+                else
+                {
+                    set_move_direction(Vector2f(1.f, 0.f));
+                }
+            }
+            else if (230.f < angle_to_target && angle_to_target < 300.f)
+            {
+                set_facing_direction(Vector2f(-1.f, 0.f));
+                if (270.f < angle_to_target)
+                {
+                    set_move_direction(Vector2f(0.f, -1.f));
+                }
+                else
+                {
+                    set_move_direction(Vector2f(0.f, 1.f));
+                }
+            }
+            else
+            {
+                target_in_area = false;
+            }
+            if (target_in_area && (std::fmodf(angle_to_target, 90.f) < 5.f))
+            {
+                set_move_direction(Vector2f());
+            }
+            if (distance_to_target < 150.f)
+            {
+                set_move_direction(-direction_to_target);
+            }
+            if (target_in_area)
+            {
+                TryShoot();
+            }
         }
     }
 }
@@ -166,23 +170,19 @@ void Enemy::updateVisuals(float time) {
             get_visuals().set_anim_frame(get_visuals().get_anim_frame() - get_visuals().get_anim_length());
         }
 
-        if (abs(get_move_direction().y) > abs(get_move_direction().x)) {
-            if (get_move_direction().y <= 0) {
-                set_facing_direction(Vector2f(0.f, -1.f));
+        if (abs(get_facing_direction().y) > abs(get_facing_direction().x)) {
+            if (get_facing_direction().y <= 0) {
                 get_visuals().set_anim_sheet_row(0);
             }
             else {
-                set_facing_direction(Vector2f(0.f, 1.f));
                 get_visuals().set_anim_sheet_row(1);
             }
         }
         else {
-            if (get_move_direction().x >= 0) {
-                set_facing_direction(Vector2f(1.f, 0.f));
+            if (get_facing_direction().x >= 0) {
                 get_visuals().set_anim_sheet_row(3);
             }
             else {
-                set_facing_direction(Vector2f(-1.f, 0.f));
                 get_visuals().set_anim_sheet_row(2);
             }
         }

@@ -170,7 +170,6 @@ void Player::updateProjectileTemplate()
 
 void Player::onDeath()
 {
-    std::cout << "player dead" << std::endl;
     //set_ready_to_delete();
 }
 

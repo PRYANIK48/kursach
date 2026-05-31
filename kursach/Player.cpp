@@ -44,6 +44,7 @@ void Player::Update(float time) {
     if (!IsDead())
     {
         updateInput(time);
+        updateProjectileTemplate();
         set_shootCooldown(get_shootCooldown() - time);
         set_iframeCurrent(get_iframeCurrent() - time);
     }

@@ -1,5 +1,5 @@
 # Roguelike Game
-<img width="1282" height="752" alt="kursach_HyArsXgwak" src="https://github.com/user-attachments/assets/4dea6d17-2310-4453-b9f9-f5d28befb321" />
+<img width="641" height="376" alt="kursach_HyArsXgwak" src="https://github.com/user-attachments/assets/4dea6d17-2310-4453-b9f9-f5d28befb321" />
 Курсовой проект по дисциплине «Программирование на языках высокого уровня».
 
 ## Описание проекта
